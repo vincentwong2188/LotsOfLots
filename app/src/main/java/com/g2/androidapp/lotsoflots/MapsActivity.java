@@ -1,5 +1,6 @@
 package com.g2.androidapp.lotsoflots;
 
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.FragmentActivity;
@@ -72,9 +73,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
             title.setPadding(5, 5, 5, 5);
             contents.setText("my text " + i);
-            contents.setPadding(5, 5, 5, 5);
+            contents.setPadding(5, 5, 5, 20);
             itemLayout.addView(title);
             itemLayout.addView(contents);
+
+            View v = new View(this);
+            v.setLayoutParams(new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    1
+            ));
+            v.setBackgroundColor(Color.parseColor("#B3B3B3"));
+            itemLayout.addView(v);
             scrollContents.addView(itemLayout);
         }
 
