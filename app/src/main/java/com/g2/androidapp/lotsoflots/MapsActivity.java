@@ -1,7 +1,15 @@
 package com.g2.androidapp.lotsoflots;
 
+import android.graphics.Typeface;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.TypedValue;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -15,11 +23,46 @@ import java.util.ArrayList;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private BottomSheetBehavior mBottomSheetBehavior;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        View bottomSheet = findViewById( R.id.bottom_sheet);
+        mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+
+        mBottomSheetBehavior.setPeekHeight(200);
+        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+
+        LinearLayout scrollContents = findViewById(R.id.scrollContents);
+
+        for(int i = 1; i <= 20 ; i++){
+            LinearLayout itemLayout = new LinearLayout(this);
+
+            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.MATCH_PARENT,
+                    RelativeLayout.LayoutParams.WRAP_CONTENT
+            );
+
+            lp.setMargins(10,10,10,10);
+            itemLayout.setLayoutParams(lp);
+            itemLayout.setOrientation(LinearLayout.VERTICAL);
+
+            TextView title = new TextView(this);
+            TextView contents = new TextView(this);
+            title.setText("Title " + i);
+            title.setTypeface(title.getTypeface(), Typeface.BOLD_ITALIC);
+            title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
+            title.setPadding(5, 5, 5, 5);
+            contents.setText("my text " + i);
+            contents.setPadding(5, 5, 5, 5);
+            itemLayout.addView(title);
+            itemLayout.addView(contents);
+            scrollContents.addView(itemLayout);
+        }
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
