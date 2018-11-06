@@ -8,6 +8,22 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
+    <com.arlib.floatingsearchview.FloatingSearchView
+        android:id="@+id/floating_search_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="14dp"
+        app:floatingSearch_searchBarMarginLeft="@dimen/search_view_inset"
+        app:floatingSearch_searchBarMarginTop="@dimen/search_view_inset"
+        app:floatingSearch_searchBarMarginRight="@dimen/search_view_inset"
+        app:floatingSearch_searchHint="Search..."
+        app:floatingSearch_suggestionsListAnimDuration="250"
+        app:floatingSearch_showSearchKey="false"
+        app:floatingSearch_leftActionMode="showSearch"
+        app:floatingSearch_menu="@menu/menu_main"
+        app:showAsAction="ifRoom"
+        app:floatingSearch_close_search_on_keyboard_dismiss="true"/>
+
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:map="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -26,13 +42,14 @@
         android:layout_height="wrap_content"
         android:clipToPadding="true"
         android:background="@android:color/white"
-        android:elevation="8dp"
+        android:elevation="16dp"
         app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
         >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="20dp"
             android:id="@+id/scrollContents"
             android:orientation="vertical"
             >
