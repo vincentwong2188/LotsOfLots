@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class SortingSystem {
 
     private ArrayList<CarPark> carparks;
-    
+
 
     public static ArrayList<CarPark> sortCarParkbyDistance(ArrayList<CarPark> carparks){
 
@@ -26,10 +26,6 @@ public class SortingSystem {
         }
 
         return carparks;
-
-
-
-
 
     }
 
