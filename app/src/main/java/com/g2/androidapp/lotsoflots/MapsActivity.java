@@ -59,7 +59,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         View bottomSheet = findViewById( R.id.bottom_sheet);
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
 
-        mBottomSheetBehavior.setPeekHeight(150);
+        mBottomSheetBehavior.setPeekHeight(pxToDP(70));
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 
         LinearLayout scrollContents = findViewById(R.id.scrollContents);
@@ -117,7 +117,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        mMap.setPadding(0, 150, 0, 150);
+        mMap.setPadding(0, pxToDP(70), 0, pxToDP(70));
 
         mMap.setOnMyLocationButtonClickListener(onMyLocationButtonClickListener);
         mMap.setOnMyLocationClickListener(onMyLocationClickListener);
@@ -183,7 +183,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             new GoogleMap.OnMyLocationButtonClickListener() {
                 @Override
                 public boolean onMyLocationButtonClick() {
-                    mMap.setMinZoomPreference(15);
+                    //mMap.setMinZoomPreference(15);
                     return false;
                 }
             };
@@ -193,7 +193,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 @Override
                 public void onMyLocationClick(@NonNull Location location) {
 
-                    mMap.setMinZoomPreference(12);
+                    //mMap.setMinZoomPreference(12);
 
                     CircleOptions circleOptions = new CircleOptions();
                     circleOptions.center(new LatLng(location.getLatitude(),
@@ -206,4 +206,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     mMap.addCircle(circleOptions);
                 }
             };
+
+    private int pxToDP(int px){
+        final float scale = findViewById(R.id.main_content).getContext().getResources().getDisplayMetrics().density;
+        int dp = (int) (px * scale + 0.5f);
+        return dp;
+    }
 }
