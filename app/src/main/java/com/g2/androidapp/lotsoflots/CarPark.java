@@ -3,7 +3,19 @@ package com.g2.androidapp.lotsoflots;
 public class CarPark {
 
 
-    /** Location is repeated?? */
+
+
+
+
+    /**  Attributes for APIRetrieveSystem   */
+    protected String carpark_number;
+    protected String carpark_address;
+    protected double x_coord;
+    protected double y_coord;
+    protected int vacancies;
+
+
+
 
     private String location;
     private double vacancy;

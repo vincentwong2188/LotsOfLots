@@ -5,8 +5,7 @@ public class Bookmark {
 
     Bookmark (){}
     Bookmark (String location){
-
-    }
+        }
 
 /** Method to get location in the Bookmark */
     public String getLocation(){
