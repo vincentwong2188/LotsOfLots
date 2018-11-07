@@ -1,6 +1,7 @@
 package com.g2.androidapp.lotsoflots;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -12,6 +13,7 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.TypedValue;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -45,6 +47,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         FloatingSearchView mSearchView = (FloatingSearchView) findViewById(R.id.floating_search_view);
 
+        mSearchView.setOnMenuItemClickListener(new FloatingSearchView.OnMenuItemClickListener() {
+            @Override
+            public void onActionMenuItemSelected(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.action_filter:
+                        startActivity(new Intent(MapsActivity.this, Filter.class));
+                        break;
+                        //return true;
+                    default:
+                        //return super.onOptionsItemSelected(item);
+                }
+            }
+        });
+
         mSearchView.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
             @Override
             public void onSearchTextChanged(String oldQuery, final String newQuery) {
@@ -55,6 +71,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 //mSearchView.swapSuggestions();
             }
         });
+
+
+
+
 
         View bottomSheet = findViewById( R.id.bottom_sheet);
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
@@ -102,6 +122,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
+
 
 
     /**

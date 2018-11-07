@@ -1,5 +1,22 @@
 <resources>
     <string name="app_name">LotsOfLots</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_filter">Filter</string>
     <string name="title_activity_maps">Map</string>
+
+    <string-array name="distanceSpinnerNames">
+        <item>Less than 1km</item>
+        <item>Between 1km to 5 km</item>
+        <item>More than 5KM</item>
+    </string-array>
+    <string-array name="priceSpinnerNames">
+        <item>$0.50 per hour</item>
+        <item>$1.00 per hour</item>
+        <item>$1.50 per hour</item>
+        <item>$2.00 per hour</item>
+    </string-array>
+    <string-array name="timeSpinnerNames">
+        <item>Less than 30min</item>
+        <item>Between 30min and 1hour</item>
+        <item>More than 1hour</item>
+    </string-array>
 </resources>
