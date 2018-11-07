@@ -5,19 +5,9 @@ import java.util.ArrayList;
 public class SortingSystem {
 
     private ArrayList<CarPark> carparks;
+    
 
-    public SortingSystem() {
-
-        /*
-
-        carparks = new ArrayList<carParkList>(0);
-        vacantCarparks = new ArrayList<vacancyList>(0);
-
-        */
-
-    }
-
-    public ArrayList<CarPark> sortCarParkbyDistance(ArrayList<CarPark> carparks){
+    public static ArrayList<CarPark> sortCarParkbyDistance(ArrayList<CarPark> carparks){
 
         for (int i=1; i< carparks.size(); i++){
 
@@ -43,7 +33,7 @@ public class SortingSystem {
 
     }
 
-    public ArrayList<CarPark> sortCarParkbyVacancy(ArrayList<CarPark> carparks){
+    public static ArrayList<CarPark> sortCarParkbyVacancy(ArrayList<CarPark> carparks){
 
         for (int i=1; i< carparks.size(); i++){
 
