@@ -22,7 +22,7 @@ public class CarPark {
     }
 
     /** Method to get number of Vacancies within CarPark*/
-    public double getVacancy(double vacancy){
+    public double getVacancy(){
         return vacancy;
 
     }
@@ -31,6 +31,11 @@ public class CarPark {
 
     public void setVacancy(double vacancy){
         this.vacancy = vacancy;
+    }
+
+    public Double calcDistance(){
+        Double a = 0.0;
+        return a;
     }
 
 }
