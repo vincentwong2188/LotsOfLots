@@ -6,7 +6,7 @@ public class CoordinateConverter {
 
     }
 
-    LatLonCoordinate convert(float y_coord, float x_coord) {
+    static LatLonCoordinate convert(float y_coord, float x_coord) {
         SVY21Coordinate geo = new SVY21Coordinate(y_coord, x_coord);
         LatLonCoordinate answer = SVY21.computeLatLon(geo);
         return answer;

@@ -2,23 +2,22 @@ package com.g2.androidapp.lotsoflots;
 
 public class CarPark {
 
-
-
-
-
-
     /**  Attributes for APIRetrieveSystem   */
     protected String carpark_number;
     protected String carpark_address;
-    protected double x_coord;
-    protected double y_coord;
+    protected float x_coord;
+    protected float y_coord;
+    protected double lat;
+    protected double lng;
     protected int vacancies;
-
-
 
 
     private String location;
     private double vacancy;
+    CarPark(){
+        int vacancies = 0;
+    }
+
 
 
     /** Method to get location in the CarPark class */

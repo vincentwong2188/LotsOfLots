@@ -21,34 +21,26 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class APIRetrieveSystem {
-    //public static final DateTimeFormatter ISO_INSTANT;
 
-    public static JSONArray result;
     public static String teststring;
+
 
     APIRetrieveSystem(){ //constructor
 
+    }
+    static void retrieveall(Context context){
+        String timeStamp = Instant.now().toString();
+        retrieveall(timeStamp, context);
     }
 
     static void retrieveall(String date_time, Context context){
         //first we fill the carpark list array with carpark objects (with no vacancies yet)
         retrieveCarParks(context);
-
         // then we fill the vacancies, where we have to do a key match
         retrieveVacancies(date_time, context);
     }
-//static double test(){
-//
-//        return 1;
-//
-//}
 
-/*    public static String test (){
-        return "hello vincent";
-    }*/
-
-
-    static String retrieveCarParks(Context context){
+    static void retrieveCarParks(Context context){
         String URL = "https://data.gov.sg/api/action/datastore_search?resource_id=139a3035-e624-4f56-b63f-89ae28d4ae4c&";
         //create a request queue
         RequestQueue requestQueue=Volley.newRequestQueue(context);
@@ -61,18 +53,29 @@ public class APIRetrieveSystem {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                 /*       try{
-                            //result = response.getJSONArray("result");
+                        try{
+                            JSONObject result = response.getJSONObject("result");
+                            JSONArray records = result.getJSONArray("records");
 
-                           *//* for(int i = 0; i < result.records.length(); i++){
-                                CarPark carpark_data.getInt("car_park_no") = new Carpark();
-                            }*//*
+                            teststring = result.toString();
 
+                            for(int i = 0; i < records.length(); i++){
+                                JSONObject temp = records.getJSONObject(i);
+                                CarPark entry = new CarPark();
+                                entry.carpark_address = temp.getString("address");
+                                entry.carpark_number = temp.getString("car_park_no");
+                                entry.x_coord = (float) temp.getDouble("x_coord");
+                                entry.y_coord = (float) temp.getDouble("y_coord");
+                                entry.lat = CoordinateConverter.convert(entry.y_coord, entry.x_coord).getLatitude();
+                                entry.lng = CoordinateConverter.convert(entry.y_coord, entry.x_coord).getLongitude();
+                                CarParkList.addCarPark(entry);
+
+                            }
                         } catch (JSONException e){
                             e.printStackTrace();
-                        }*/
+                        }
 
-                        teststring = response.toString();
+
                     }
                 },
                 new Response.ErrorListener() {
@@ -84,15 +87,11 @@ public class APIRetrieveSystem {
 
         requestQueue.add(objectRequest);
 
-        //String teststring = result.toString();
-        return teststring;
-
-
     }
 
-    void retrieveVacancies(Context context){
+    static void retrieveVacancies(Context context){
         String timeStamp = Instant.now().toString();
-        retrieveVacancies(timeStamp, context);
+        retrieveVacancies(timeStamp.substring(0,19), context);
 
     }
 
@@ -100,6 +99,8 @@ public class APIRetrieveSystem {
 
         String URL = "https://api.data.gov.sg/v1/transport/carpark-availability?date_time=";
         String ReqURL = URL + date_time;
+
+        //teststring = ReqURL;
 
         //create a request queue
         RequestQueue requestQueue=Volley.newRequestQueue(context);
@@ -113,11 +114,19 @@ public class APIRetrieveSystem {
                     @Override
                     public void onResponse(JSONObject response) {
                         try{
-                            JSONArray jsonArray = response.getJSONArray("carpark_data");
-                            for(int i = 0; i < jsonArray.length(); i++){
-                                //Carpark carpark_data.getInt("carpark_number") = new Carpark(); //should implement a search for the same carpark no
-                                //carpark_data.getInt("carpark_number").vacancies = carpark_data.getInt("lots_available");
-                                //CarparkList.Carparks[i] = carpark_data.getInt("carpark_number");
+                            JSONArray items = response.getJSONArray("items");
+                            JSONObject itemsobject = items.getJSONObject(0);
+                            JSONArray carpark_data = itemsobject.getJSONArray("carpark_data");
+                            teststring = response.toString();
+
+                            for(int i = 0; i < carpark_data.length(); i++){
+                                JSONObject temp = carpark_data.getJSONObject(i);
+                                int index = CarParkList.findCarpark(temp.getString("carpark_number"));
+
+                                JSONArray carpark_info = temp.getJSONArray("carpark_info");
+                                JSONObject carpark_infoobject = carpark_info.getJSONObject(0);
+                                CarParkList.changeVacancy(carpark_infoobject.getInt("lots_available"), index);
+
                             }
                         } catch (JSONException e){
                             e.printStackTrace();
