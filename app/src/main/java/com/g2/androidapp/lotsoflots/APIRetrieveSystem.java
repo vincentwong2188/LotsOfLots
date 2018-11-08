@@ -23,11 +23,32 @@ import java.util.Date;
 public class APIRetrieveSystem {
     //public static final DateTimeFormatter ISO_INSTANT;
 
+    public static JSONArray result;
+    public static String teststring;
+
     APIRetrieveSystem(){ //constructor
 
     }
 
-    static void retrieveCarParks(Context context){
+    static void retrieveall(String date_time, Context context){
+        //first we fill the carpark list array with carpark objects (with no vacancies yet)
+        retrieveCarParks(context);
+
+        // then we fill the vacancies, where we have to do a key match
+        retrieveVacancies(date_time, context);
+    }
+//static double test(){
+//
+//        return 1;
+//
+//}
+
+/*    public static String test (){
+        return "hello vincent";
+    }*/
+
+
+    static String retrieveCarParks(Context context){
         String URL = "https://data.gov.sg/api/action/datastore_search?resource_id=139a3035-e624-4f56-b63f-89ae28d4ae4c&";
         //create a request queue
         RequestQueue requestQueue=Volley.newRequestQueue(context);
@@ -40,15 +61,18 @@ public class APIRetrieveSystem {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        try{
-                            JSONArray jsonArray = response.getJSONArray("carpark_data");
-                            for(int i = 0; i < jsonArray.length(); i++){
-                                //Carpark carpark_data.getInt("car_park_no") = new Carpark();
-                            }
+                 /*       try{
+                            //result = response.getJSONArray("result");
+
+                           *//* for(int i = 0; i < result.records.length(); i++){
+                                CarPark carpark_data.getInt("car_park_no") = new Carpark();
+                            }*//*
+
                         } catch (JSONException e){
                             e.printStackTrace();
-                        }
+                        }*/
 
+                        teststring = response.toString();
                     }
                 },
                 new Response.ErrorListener() {
@@ -59,6 +83,10 @@ public class APIRetrieveSystem {
         );
 
         requestQueue.add(objectRequest);
+
+        //String teststring = result.toString();
+        return teststring;
+
 
     }
 

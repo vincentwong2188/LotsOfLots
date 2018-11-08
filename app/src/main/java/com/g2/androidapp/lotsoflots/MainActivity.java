@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -17,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -31,12 +33,32 @@ public class MainActivity extends AppCompatActivity {
 
         Button mapsButton = (Button) findViewById(R.id.maps_button);
 
+
+
         mapsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, HomePage.class));
             }
         });
+
+        //testing of API retrieval starts here
+
+        Button testapi_button = (Button) findViewById(R.id.testapi_button);
+        final TextView testapi_output = (TextView) findViewById(R.id.testapi_output);
+
+        testapi_button.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                //APIRetrieveSystem.retrieveCarParks(MainActivity.this);
+              testapi_output.setText(APIRetrieveSystem.retrieveCarParks(MainActivity.this));
+               // testapi_output.setText("hello vincent");
+               // testapi_output.setText(APIRetrieveSystem.test());
+            }
+        });
+
+        //testing of API retrieval ends here
+
     }
 
     @Override
