@@ -1,5 +1,6 @@
 package com.g2.androidapp.lotsoflots;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -14,6 +15,7 @@ public class FirstInput extends AppCompatActivity {
 
     EditText name, address;
     String addressBkmk;
+    private final static int REQUEST_CODE_1 = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,7 +28,10 @@ public class FirstInput extends AppCompatActivity {
         DoneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                Intent intent  = new Intent(FirstInput.this,BookmarkPage.class);
+                startActivityForResult(intent, REQUEST_CODE_1);
+
+                //finish();
             }
         });
     }

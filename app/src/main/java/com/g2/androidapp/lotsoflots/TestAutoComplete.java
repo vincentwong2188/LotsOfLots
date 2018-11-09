@@ -18,7 +18,7 @@ public class TestAutoComplete extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     int PLACE_AUTOCOMPLETE_REQUEST_CODE =1;
     Place finalPlace;
-    HomePage homePage = new HomePage();
+    BookmarkPage bookmarkPage = new BookmarkPage();
     @Override
     protected void onActivityResult(int requestCode , int resultCode, Intent data){
         if(requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE){

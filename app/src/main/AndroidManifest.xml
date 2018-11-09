@@ -48,7 +48,7 @@
             android:name=".Filter"
             android:label="Filter" />
         <activity
-            android:name=".HomePage"
+            android:name=".BookmarkPage"
             android:label="Bookmarks" />
         <activity
             android:name=".FirstInput"

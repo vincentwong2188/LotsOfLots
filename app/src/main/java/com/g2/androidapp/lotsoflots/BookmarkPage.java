@@ -13,7 +13,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-public class HomePage extends AppCompatActivity {
+public class BookmarkPage extends AppCompatActivity {
 
     String location;
     String addressName;
@@ -21,32 +21,16 @@ public class HomePage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home_page);
-        Button SearchBtn = (Button) findViewById(R.id.SearchBtn);
+        setContentView(R.layout.activity_bookmark_page);
         final Intent intent = new Intent(this, TestAutoComplete.class);
-        SearchBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // goes to Shenc's code
-            }
-        });
-        Button RefreshBtn = (Button) findViewById(R.id.RefreshBtn);
-        RefreshBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bookmarkList();
-            }
-        });
         Button AddBookmark = (Button) findViewById(R.id.AddBkmk);
         AddBookmark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 startActivityForResult(intent , 1014);
-
-
             }
         });
+        bookmarkList();
     }
 
     @Override

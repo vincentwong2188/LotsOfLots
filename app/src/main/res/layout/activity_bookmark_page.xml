@@ -4,36 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomePage">
-
-    <Button
-        android:id="@+id/SearchBtn"
-        android:layout_width="195dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="Search Location"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.982" />
+    tools:context=".BookmarkPage">
 
     <Button
         android:id="@+id/AddBkmk"
-        android:layout_width="149dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="8dp"
+        android:layout_width="214dp"
+        android:layout_height="46dp"
+        android:layout_marginStart="84dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="Add Bookmark"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.963"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.982" />
+        app:layout_constraintVertical_bias="0.939" />
 
     <ScrollView
         android:id="@+id/scrollView2"
@@ -67,21 +51,5 @@
 
         </LinearLayout>
     </ScrollView>
-
-    <Button
-        android:id="@+id/RefreshBtn"
-        android:layout_width="233dp"
-        android:layout_height="43dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="Refresh"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.476"
-        app:layout_constraintStart_toStartOf="@+id/scrollView2"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.871" />
 
 </android.support.constraint.ConstraintLayout>
