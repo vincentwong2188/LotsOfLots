@@ -1,6 +1,6 @@
 package com.g2.androidapp.lotsoflots;
 
-import java.util.ArrayList; //where shld the import be at???
+import java.util.ArrayList;
 
 public class CarParkList {
 
@@ -31,11 +31,7 @@ public class CarParkList {
     }
 
 
- /*   public ArrayList<CarPark> getCarpark() {
-        ArrayList<CarPark> carpark;
-        carpark =
-        return carpark;
-    }*/
+
 
     public static ArrayList<CarPark> getCarParkList(){
         return carparksArrayList;

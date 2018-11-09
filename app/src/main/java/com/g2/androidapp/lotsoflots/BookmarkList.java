@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class BookmarkList {
 
+
     private int numberOfBookmarks;
     private ArrayList<Bookmark> bookmarkArrayList = new ArrayList<>(0);
 
