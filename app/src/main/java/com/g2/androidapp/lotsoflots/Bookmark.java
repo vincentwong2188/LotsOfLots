@@ -1,31 +1,21 @@
 package com.g2.androidapp.lotsoflots;
 
 public class Bookmark {
-    private String location;
+    protected double _long;
+    protected double _lat;
 
-    Bookmark (){}
-    Bookmark (String location){
-
+    Bookmark (double _long, double _lat){
     }
 
-/** Method to get location in the Bookmark */
-    public String getLocation(){
-        return location;
-    }
-
-
-/** Method to set location in the Bookmark*/
-
-    public void setLocation(String Location){
-        this.location = Location;
-    }
+    /** Method to get longitude and latitude in the Bookmark */
+    public double get_long(){ return _long; }
+    public double get_lat(){return _lat;}
 
 
 
+    /** Method to set longitude and latitude in the Bookmark*/
+
+    public void setLongitude (double _long){ this._long = _long; }
+    public void setLatitude (double _lat) {this._lat = _lat;}
 
 }
-
-
-
-
-/** IS BOOKMARK A SUPERCLASS OF BOOKMARKLIST?*/

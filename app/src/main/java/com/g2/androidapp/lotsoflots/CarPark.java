@@ -3,23 +3,36 @@ package com.g2.androidapp.lotsoflots;
 public class CarPark {
 
 
-    /** Location is repeated?? */
-
-    private String location;
-    private double vacancy;
 
 
-    /** Method to get location in the CarPark class */
-    public String getLocation(){
-        return location;
+    /**  Attributes for APIRetrieveSystem   */
+    protected String carpark_number;
+    protected String carpark_address;
+    protected float x_coord;
+    protected float y_coord;
+    protected double _long;
+    protected double _lat;
+    private double vacancy
+            ;
+
+
+
+
+
+    /** Method to get longitude and latitude in the CarPark class */
+    public double get_long(){
+        return _long;
     }
+    public double get_lat() { return _lat; }
 
 
-    /** Method to set location in the CarPark class */
+    /** Method to set longitude and latitude in the CarPark class */
 
-    public void setLocation(String Location){
-        this.location = Location;
+    public void setLongitude (double _long){
+        this._long = _long;
     }
+    public void setLatitude (double _lat) {this._lat = _lat;}
+
 
     /** Method to get number of Vacancies within CarPark*/
     public double getVacancy(){
@@ -37,5 +50,15 @@ public class CarPark {
         Double a = 0.0;
         return a;
     }
+
+
+
+    public LatLonCoordinate converter(float y_coord, float x_coord){
+        CoordinateConverter convert2 = new  CoordinateConverter();
+        return convert2.convert(y_coord, x_coord);
+
+    }
+
+
 
 }

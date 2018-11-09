@@ -1,6 +1,5 @@
 package com.g2.androidapp.lotsoflots;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class BookmarkList {
@@ -11,65 +10,35 @@ public class BookmarkList {
 
 
     /** Getting the list of bookmarks. */
-    public ArrayList<Bookmark> getBookmark() {
-        return bookmarkArrayList;
+    public ArrayList<Bookmark> getBookmark(){return bookmarkArrayList;}
+
+
+
+    /** Adding bookmark.*/
+    public void addBookmark(double _long, double _lat)  {
+        bookmarkArrayList.add(new Bookmark(_long, _lat));
     }
 
-
-    /** Adding bookmark.
-     * SHOULD AN ARRAY LIST OF BOOKMARKS BE RETURNED? */
-    public void /* ArrayList<Bookmark>*/ addBookmark(String location){
-        bookmarkArrayList.add(new Bookmark(location));
-        /*return bookmarkArrayList;*/
-
-    }
 
 
     /** deleting bookmark */
 
+    public void deleteBookmark(double _long, double _lat){
+        Bookmark deleting = new Bookmark (_long, _lat);
 
-    public ArrayList<Bookmark> deleteBookmark(String Location){
         for(int j = 0; j < bookmarkArrayList.size(); j++)
         {
-            Bookmark deleting = bookmarkArrayList.get(j);
 
-            if(deleting.equals(deleteBookmark(Location)))
+            if(deleting == bookmarkArrayList.get(j)) {
                 //found, delete.
                 bookmarkArrayList.remove(j);
-                break;
             }
-            return bookmarkArrayList;
+            break;
 
         }
+
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*  public Bookmark getBookmark(String location) {
-for(int j = 0; j < bookmarkArrayList.size(); j++)
-if ( bookmarkArrayList.get(j) =
-
-        return  ArrayList<Bookmark>.get(j)
-    }
-
-*/
+}
 
 
 
