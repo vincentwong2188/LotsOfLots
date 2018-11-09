@@ -2,37 +2,35 @@ package com.g2.androidapp.lotsoflots;
 
 public class CarPark {
 
-
-
-
     /**  Attributes for APIRetrieveSystem   */
     protected String carpark_number;
     protected String carpark_address;
     protected float x_coord;
     protected float y_coord;
-    protected double _long;
-    protected double _lat;
-    private double vacancy
-            ;
+    protected double lat;
+    protected double lng;
+    protected int vacancies;
 
 
-
-
-
-    /** Method to get longitude and latitude in the CarPark class */
-    public double get_long(){
-        return _long;
+    private String location;
+    private double vacancy;
+    CarPark(){
+        int vacancies = 0;
     }
-    public double get_lat() { return _lat; }
 
 
-    /** Method to set longitude and latitude in the CarPark class */
 
-    public void setLongitude (double _long){
-        this._long = _long;
+    /** Method to get location in the CarPark class */
+    public String getLocation(){
+        return location;
     }
-    public void setLatitude (double _lat) {this._lat = _lat;}
 
+
+    /** Method to set location in the CarPark class */
+
+    public void setLocation(String Location){
+        this.location = Location;
+    }
 
     /** Method to get number of Vacancies within CarPark*/
     public double getVacancy(){
@@ -51,14 +49,5 @@ public class CarPark {
         return a;
     }
 
-
-
-    public LatLonCoordinate converter(float y_coord, float x_coord){
-        CoordinateConverter convert2 = new  CoordinateConverter();
-        return convert2.convert(y_coord, x_coord);
-
-    }
-
-
-
 }
+
