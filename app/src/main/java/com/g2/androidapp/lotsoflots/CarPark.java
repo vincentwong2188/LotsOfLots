@@ -1,5 +1,9 @@
 package com.g2.androidapp.lotsoflots;
 
+import android.location.Location;
+
+import com.google.android.gms.maps.model.LatLng;
+
 public class CarPark {
 
     /**  Attributes for APIRetrieveSystem   */
@@ -14,9 +18,11 @@ public class CarPark {
 
     private String location;
     private double vacancy;
-    CarPark(){
-        int vacancies = 0;
-    }
+    CarPark(){ int vacancies = 0; }
+
+    CarPark(double lat, double lng){}
+
+
 
 
 
@@ -44,10 +50,27 @@ public class CarPark {
         this.vacancy = vacancy;
     }
 
-    public Double calcDistance(){
-        Double a = 0.0;
-        return a;
-    }
+
+
+public  float calcDistance(LatLonCoordinate currentloc){
+    Location currentloc2 = new Location("");
+    currentloc2.setLatitude(currentloc.getLatitude());
+    currentloc2.setLongitude(currentloc.getLongitude());
+
+
+    Location carparkloc = new Location("");
+    carparkloc.setLatitude(lat);
+    carparkloc.setLongitude(lng);
+
+
+    return carparkloc.distanceTo(currentloc2);
+
+
+}
+
+
+
+
 
 }
 
