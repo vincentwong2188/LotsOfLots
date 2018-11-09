@@ -13,10 +13,12 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.g2.androidapp.lotsoflots.BookmarkPage;
 
 public class TestAutoComplete extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     int PLACE_AUTOCOMPLETE_REQUEST_CODE =1;
+    private final static int REQUEST_CODE_1 = 1;
     Place finalPlace;
     BookmarkPage bookmarkPage = new BookmarkPage();
     @Override
@@ -43,9 +45,17 @@ public class TestAutoComplete extends AppCompatActivity {
                 intent.putExtra("location" , finalPlace.getLatLng().toString());
                 intent.putExtra("addressName" , finalPlace.getName().toString());
                 setResult(Activity.RESULT_OK , intent);
-                finish();
+                Intent intent2  = new Intent(TestAutoComplete.this,BookmarkPage.class);
+                intent2.putExtra("bookmarkList","bookmarkList");
+                if (intent.getStringExtra("bookmarkList").equals("bookmarkList")) {
+                    BookmarkPage bookmarkPage = new BookmarkPage();
+                    bookmarkPage.bookmarkList();
+                startActivityForResult(intent2, REQUEST_CODE_1);
+                // finish();
             }
         });
+
+        }
 
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
@@ -65,4 +75,5 @@ public class TestAutoComplete extends AppCompatActivity {
             }
         });
     }
+
 }

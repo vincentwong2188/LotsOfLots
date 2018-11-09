@@ -15,7 +15,6 @@ public class FirstInput extends AppCompatActivity {
 
     EditText name, address;
     String addressBkmk;
-    private final static int REQUEST_CODE_1 = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,8 +27,7 @@ public class FirstInput extends AppCompatActivity {
         DoneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent  = new Intent(FirstInput.this,BookmarkPage.class);
-                startActivityForResult(intent, REQUEST_CODE_1);
+
 
                 //finish();
             }

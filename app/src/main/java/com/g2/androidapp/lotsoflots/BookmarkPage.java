@@ -17,11 +17,11 @@ public class BookmarkPage extends AppCompatActivity {
 
     String location;
     String addressName;
-    String[] Addresses;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bookmark_page);
+        bookmarkList();
         final Intent intent = new Intent(this, TestAutoComplete.class);
         Button AddBookmark = (Button) findViewById(R.id.AddBkmk);
         AddBookmark.setOnClickListener(new View.OnClickListener() {
@@ -30,7 +30,7 @@ public class BookmarkPage extends AppCompatActivity {
                 startActivityForResult(intent , 1014);
             }
         });
-        bookmarkList();
+
     }
 
     @Override
