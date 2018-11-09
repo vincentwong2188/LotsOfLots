@@ -6,17 +6,29 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
+
+    final static String TAG = "Main";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+       /* APIRetrieveSystem.retrieveVacancies(MainActivity.this);
+        Log.d(TAG, APIRetrieveSystem.teststring);*/
+
+
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -31,12 +43,36 @@ public class MainActivity extends AppCompatActivity {
 
         Button mapsButton = (Button) findViewById(R.id.maps_button);
 
+
+
         mapsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, HomePage.class));
             }
         });
+
+        //testing of API retrieval starts here
+
+        Button testapi_button = (Button) findViewById(R.id.testapi_button);
+        final TextView testapi_output = (TextView) findViewById(R.id.testapi_output);
+
+        testapi_button.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                //APIRetrieveSystem.retrieveCarParks(MainActivity.this);
+
+                APIRetrieveSystem.retrieveCarParks(MainActivity.this);
+                //testapi_output.setText(CarParkList.getCarParkList().get(1).vacancies);
+
+               //testapi_output.setText(Instant.now().toString());
+               testapi_output.setText(APIRetrieveSystem.teststring);
+               Log.d(TAG, APIRetrieveSystem.teststring);
+            }
+        });
+
+        //testing of API retrieval ends here
+
     }
 
     @Override

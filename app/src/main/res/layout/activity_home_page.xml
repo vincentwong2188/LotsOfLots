@@ -36,8 +36,9 @@
         app:layout_constraintVertical_bias="0.982" />
 
     <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="504dp"
+        android:id="@+id/scrollView2"
+        android:layout_width="369dp"
+        android:layout_height="486dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -52,7 +53,7 @@
         <LinearLayout
             android:id="@+id/scrollContents"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
@@ -66,5 +67,21 @@
 
         </LinearLayout>
     </ScrollView>
+
+    <Button
+        android:id="@+id/RefreshBtn"
+        android:layout_width="233dp"
+        android:layout_height="43dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Refresh"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.476"
+        app:layout_constraintStart_toStartOf="@+id/scrollView2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.871" />
 
 </android.support.constraint.ConstraintLayout>
