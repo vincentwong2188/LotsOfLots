@@ -32,7 +32,6 @@ public class CarParkList {
 
 
 
-
     public static ArrayList<CarPark> getCarParkList(){
         return carparksArrayList;
     }
