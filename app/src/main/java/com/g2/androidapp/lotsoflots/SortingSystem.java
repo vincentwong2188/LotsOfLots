@@ -13,7 +13,7 @@ public class SortingSystem {
 
             for (int j=1 ; j>0; j++){
 
-                if (carparks.get(j).calcDistance() < carparks.get(j-1).calcDistance()){
+                if (carparks.get(j).calcDistance() < carparks.get(j-1).calcDistance()){ // need to get current location (lat and longitude from either SC or Darrence)
 
                     CarPark temp = carparks.get(j-1);
                     carparks.set(j-1,carparks.get(j));

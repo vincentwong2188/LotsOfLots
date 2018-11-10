@@ -4,41 +4,32 @@ import java.util.ArrayList;
 
 public class BookmarkList {
 
+
     private int numberOfBookmarks;
-    private ArrayList<Bookmark> bookmarkArrayList = new ArrayList<>(0);
+    private static ArrayList<Bookmark> bookmarkArrayList = new ArrayList<>(0);
 
 
 
     /** Getting the list of bookmarks. */
-    public ArrayList<Bookmark> getBookmark(){return bookmarkArrayList;}
+    public static ArrayList<Bookmark> getBookmark(){return bookmarkArrayList;}
 
 
 
     /** Adding bookmark.*/
-    public void addBookmark(double _long, double _lat)  {
-        bookmarkArrayList.add(new Bookmark(_long, _lat));
+    public static void addBookmark(Bookmark bookmark)  {
+        bookmarkArrayList.add(bookmark);
     }
 
 
 
     /** deleting bookmark */
 
-    public void deleteBookmark(double _long, double _lat){
-        Bookmark deleting = new Bookmark (_long, _lat);
-
-        for(int j = 0; j < bookmarkArrayList.size(); j++)
-        {
-
-            if(deleting == bookmarkArrayList.get(j)) {
-                //found, delete.
-                bookmarkArrayList.remove(j);
-            }
-            break;
-
+    public static void deleteBookmark(Bookmark bookmark){
+       bookmarkArrayList.remove(bookmark);
         }
 
     }
-}
+
 
 
 
