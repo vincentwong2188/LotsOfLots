@@ -94,11 +94,9 @@ public  float calcDistance(LatLonCoordinate currentloc){
     currentloc2.setLatitude(currentloc.getLatitude());
     currentloc2.setLongitude(currentloc.getLongitude());
 
-
     Location carparkloc = new Location("");
     carparkloc.setLatitude(lat);
     carparkloc.setLongitude(lng);
-
 
     return carparkloc.distanceTo(currentloc2);
 
