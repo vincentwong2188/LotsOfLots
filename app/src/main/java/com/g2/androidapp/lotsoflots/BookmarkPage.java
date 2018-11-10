@@ -92,7 +92,7 @@ public class BookmarkPage extends AppCompatActivity {
             bookmarkData.add(data.getName());
         }
 
-        BookmarkAdapter adapter = new BookmarkAdapter(getApplicationContext(),R.layout.bookmark_list_item,bookmarkData);
+        BookmarkAdapter adapter = new BookmarkAdapter(getApplicationContext(),R.layout.bookmark_list_item,bookmarkDataList);
         listView.setAdapter(adapter);
         listView.invalidate();
     }

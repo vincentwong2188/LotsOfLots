@@ -22,9 +22,14 @@ public class BookmarkAdapter extends ArrayAdapter<BookmarkData> {
         super(context, resource);
     }
 
-    public BookmarkAdapter( Context context, int resource, int textViewResourceId) {
-        super(context, resource, textViewResourceId);
+    public BookmarkAdapter(Context context, int resource, ArrayList<BookmarkData> data){
+        super(context,resource,data);
     }
+
+    //public ArrayAdapter(@NonNull Context context, @LayoutRes int resource,
+    //                    @NonNull List<T> objects) {
+    //    this(context, resource, 0, objects);
+    //}
 
     @Override
     public View getView (final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
