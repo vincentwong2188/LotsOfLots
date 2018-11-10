@@ -3,8 +3,8 @@ package com.g2.androidapp.lotsoflots;
 public class Bookmark {
 
 
-    protected double lng;
-    protected double lat;
+  public double lng;
+  public double lat;
 
     Bookmark (double lng, double lat){
     }

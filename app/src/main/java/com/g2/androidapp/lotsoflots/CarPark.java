@@ -17,12 +17,34 @@ public class CarPark {
 
 
     private String location;
-    private double vacancy;
+
     CarPark(){ int vacancies = 0; }
 
+/*
     CarPark(double lat, double lng){}
 
+*/
 
+
+    CarPark(String number, String address, float x, float y){
+        carpark_number = number;
+        carpark_address = address;
+        x_coord = x;
+        y_coord = y;
+        lat = CoordinateConverter.convert(y_coord, x_coord).getLatitude();
+        lng = CoordinateConverter.convert(y_coord, x_coord).getLongitude();
+        vacancies = 0;
+
+    }
+    CarPark(String number, String address, float x, float y, int vac){
+        carpark_number = number;
+        carpark_address = address;
+        x_coord = x;
+        y_coord = y;
+        lat = CoordinateConverter.convert(y_coord, x_coord).getLatitude();
+        lng = CoordinateConverter.convert(y_coord, x_coord).getLongitude();
+        vacancies = vac;
+    }
 
 
 
@@ -40,14 +62,14 @@ public class CarPark {
 
     /** Method to get number of Vacancies within CarPark*/
     public double getVacancy(){
-        return vacancy;
+        return vacancies;
 
     }
 
     /** Method to set number of vacancies within CarPark */
 
-    public void setVacancy(double vacancy){
-        this.vacancy = vacancy;
+    public void setVacancy(int vacancy){
+        vacancies = vacancy;
     }
 
 
