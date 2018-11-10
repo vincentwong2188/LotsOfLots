@@ -9,22 +9,15 @@
     android:fitsSystemWindows="true">
 
 
-
-    <com.arlib.floatingsearchview.FloatingSearchView
-        android:id="@+id/floating_search_view"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:elevation="14dp"
-        app:floatingSearch_searchBarMarginLeft="@dimen/search_view_inset"
-        app:floatingSearch_searchBarMarginTop="@dimen/search_view_inset"
-        app:floatingSearch_searchBarMarginRight="@dimen/search_view_inset"
-        app:floatingSearch_searchHint="Search..."
-        app:floatingSearch_suggestionsListAnimDuration="250"
-        app:floatingSearch_showSearchKey="false"
-        app:floatingSearch_leftActionMode="showSearch"
-        app:floatingSearch_menu="@menu/menu_main"
-        app:showAsAction="ifRoom"
-        app:floatingSearch_close_search_on_keyboard_dismiss="true"/>
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:map="http://schemas.android.com/apk/res-auto"
