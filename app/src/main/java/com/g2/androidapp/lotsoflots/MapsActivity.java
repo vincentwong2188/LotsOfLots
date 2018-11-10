@@ -52,6 +52,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Intent receivedIntent;
     private String sTargetLocation = null;
     private boolean searched = false;
+    LinearLayout clickedItem;
 
     final int LOCATION_PERMISSION_REQUEST_CODE = 21;
 
@@ -177,17 +178,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if(currentLocation != null){
                 targetLocation = currentLocation;
             }else{
-                targetLocation.setLatitude(1.3493996);
-                targetLocation.setLongitude(100.68721149999999);
+                //Toast.makeText(MapsActivity.this, "No location detected", Toast.LENGTH_SHORT).show();
             }
 
         }else{
             String[] targetLocationBits = sTargetLocation.split(",");
             targetLocation.setLatitude(Double.parseDouble(targetLocationBits[0]));
             targetLocation.setLongitude(Double.parseDouble(targetLocationBits[1]));
+            searched = true;
+            searchLocation(targetLocation);
         }
 
-        searchLocation(targetLocation);
     }
 
     /** Called when the user clicks a marker. */
@@ -275,8 +276,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         LinearLayout scrollContents = findViewById(R.id.scrollContents);
 
+        scrollContents.removeAllViewsInLayout();
+
         for(int i = 1; i <= 20 ; i++){
             LinearLayout itemLayout = new LinearLayout(this);
+
+            // Implement it's on click listener.
+            itemLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // Show a toast message.
+                    clickedItem = (LinearLayout) view;
+                    TextView tv = (TextView) clickedItem.getChildAt(1);
+                    Toast.makeText(MapsActivity.this, tv.getText(), Toast.LENGTH_SHORT).show();
+                    showPin("E8");
+                }
+            });
+
 
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.MATCH_PARENT,
@@ -307,5 +323,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             itemLayout.addView(v);
             scrollContents.addView(itemLayout);
         }
+    }
+
+    private void showPin(String carPark){
+
     }
 }
