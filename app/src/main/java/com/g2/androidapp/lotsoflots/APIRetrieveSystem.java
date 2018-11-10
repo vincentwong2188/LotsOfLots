@@ -2,6 +2,7 @@ package com.g2.androidapp.lotsoflots;
 
 import android.app.VoiceInteractor;
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -14,11 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.security.Timestamp;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 public class APIRetrieveSystem {
 
@@ -29,6 +26,7 @@ public class APIRetrieveSystem {
     APIRetrieveSystem(){ //constructor
 
     }
+
     static void retrieveall(Context context){
         String timeStamp = Instant.now().toString();
         retrieveall(timeStamp, context);
@@ -37,57 +35,75 @@ public class APIRetrieveSystem {
     static void retrieveall(String date_time, Context context){
         //first we fill the carpark list array with carpark objects (with no vacancies yet)
         retrieveCarParks(context);
+        Log.d("Response","carpark retrieval success");
         // then we fill the vacancies, where we have to do a key match
         retrieveVacancies(date_time, context);
+
     }
 
     static void retrieveCarParks(Context context){
-        String URL = "https://data.gov.sg/api/action/datastore_search?resource_id=139a3035-e624-4f56-b63f-89ae28d4ae4c&";
+        int offset = 0;
+
         //create a request queue
-        RequestQueue requestQueue=Volley.newRequestQueue(context);
+        do {
+            String URLpart1 = "https://data.gov.sg/api/action/datastore_search?offset=";
+            String URLpart2 = "&resource_id=139a3035-e624-4f56-b63f-89ae28d4ae4c";
+            String URL = URLpart1 + offset + URLpart2;
 
-        //create json request
-        JsonObjectRequest objectRequest = new JsonObjectRequest(
-                Request.Method.GET,
-                URL,
-                null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try{
-                            JSONObject result = response.getJSONObject("result");
-                            JSONArray records = result.getJSONArray("records");
+            //Log.d("Response", "URL is " + URL);
 
-                            teststring = result.toString();
+            RequestQueue requestQueue = Volley.newRequestQueue(context);
 
-                            for(int i = 0; i < records.length(); i++){
-                                JSONObject temp = records.getJSONObject(i);
-                                CarPark entry = new CarPark();
-                                entry.carpark_address = temp.getString("address");
+            //create json request
+            JsonObjectRequest objectRequest = new JsonObjectRequest(
+                    Request.Method.GET,
+                    URL,
+                    null,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            //Log.d("Response", "response is: " + response.toString());
+
+                            try {
+                                JSONObject result = response.getJSONObject("result");
+                                //Log.d("Response", "results are: " + result.toString());
+                                JSONArray records = result.getJSONArray("records");
+                                //Log.d("Response", "records are: " + records.toString());
+
+                                for (int i = 0; i < records.length(); i++) {
+                                    JSONObject temp = records.getJSONObject(i);
+                                    //Log.d("Response", "temp is " + temp.toString());
+                                    CarPark entry = new CarPark(temp.getString("car_park_no"), temp.getString("address"), (float) temp.getDouble("x_coord"), (float) temp.getDouble("y_coord"));
+                                    //Log.d("Response", "temp is " + entry.carpark_address);
+           /*                   entry.carpark_address = temp.getString("address");
                                 entry.carpark_number = temp.getString("car_park_no");
                                 entry.x_coord = (float) temp.getDouble("x_coord");
                                 entry.y_coord = (float) temp.getDouble("y_coord");
                                 entry.lat = CoordinateConverter.convert(entry.y_coord, entry.x_coord).getLatitude();
-                                entry.lng = CoordinateConverter.convert(entry.y_coord, entry.x_coord).getLongitude();
-                                CarParkList.addCarPark(entry);
-
+                                entry.lng = CoordinateConverter.convert(entry.y_coord, entry.x_coord).getLongitude();*/
+                                    CarParkList.addCarPark(entry);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                Log.e("Response", "exception", e);
                             }
-                        } catch (JSONException e){
-                            e.printStackTrace();
+
+
                         }
-
-
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                        }
                     }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                    }
-                }
-        );
+            );
 
-        requestQueue.add(objectRequest);
+            requestQueue.add(objectRequest);
 
+            offset = offset + 100;
+        }while(offset < 3698);
+
+        Log.d("Response", "end of retrieveCarParks");
     }
 
     static void retrieveVacancies(Context context){
@@ -101,8 +117,6 @@ public class APIRetrieveSystem {
         String URL = "https://api.data.gov.sg/v1/transport/carpark-availability?date_time=";
         String ReqURL = URL + date_time;
 
-        //teststring = ReqURL;
-
         //create a request queue
         RequestQueue requestQueue=Volley.newRequestQueue(context);
 
@@ -114,19 +128,23 @@ public class APIRetrieveSystem {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        Log.d("Response", response.toString());
                         try{
                             JSONArray items = response.getJSONArray("items");
                             JSONObject itemsobject = items.getJSONObject(0);
                             JSONArray carpark_data = itemsobject.getJSONArray("carpark_data");
-                            teststring = response.toString();
-
+                            Log.d("Response", "carparkdata are: " + carpark_data.toString());
+                            Log.d("Response", "number of carparkdata entries are: "+ carpark_data.length());
                             for(int i = 0; i < carpark_data.length(); i++){
                                 JSONObject temp = carpark_data.getJSONObject(i);
                                 int index = CarParkList.findCarpark(temp.getString("carpark_number"));
+                                Log.d("Response", "the index is: "+ index);
 
                                 JSONArray carpark_info = temp.getJSONArray("carpark_info");
                                 JSONObject carpark_infoobject = carpark_info.getJSONObject(0);
+                                Log.d("Response", "carpark_infoobject is: " + carpark_infoobject.toString());
                                 CarParkList.changeVacancy(carpark_infoobject.getInt("lots_available"), index);
+                                Log.d("Response", "vacancies are: " + CarParkList.getCarParkList().get(index).vacancies);
 
                             }
                         } catch (JSONException e){

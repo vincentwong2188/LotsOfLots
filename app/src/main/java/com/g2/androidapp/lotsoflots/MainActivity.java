@@ -22,11 +22,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
        /* APIRetrieveSystem.retrieveVacancies(MainActivity.this);
         Log.d(TAG, APIRetrieveSystem.teststring);*/
-
-
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -62,12 +59,14 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v){
                 //APIRetrieveSystem.retrieveCarParks(MainActivity.this);
 
-                APIRetrieveSystem.retrieveCarParks(MainActivity.this);
+                //APIRetrieveSystem.retrieveCarParks(MainActivity.this);
                 //testapi_output.setText(CarParkList.getCarParkList().get(1).vacancies);
 
                //testapi_output.setText(Instant.now().toString());
-               testapi_output.setText(APIRetrieveSystem.teststring);
-               Log.d(TAG, APIRetrieveSystem.teststring);
+
+
+                APIRetrieveSystem.retrieveall(MainActivity.this);
+               testapi_output.setText("ran!");
             }
         });
 

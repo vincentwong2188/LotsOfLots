@@ -18,7 +18,7 @@ public class CarParkList {
     public static int findCarpark(String carpark_no){
         int carparkindex = -1;
         for(int j = 0; j < carparksArrayList.size(); j++ ){
-            if(carparksArrayList.get(j).carpark_number == carpark_no){
+            if(carparksArrayList.get(j).carpark_number.equals(carpark_no)){
                 carparkindex = j;
                 break;
             }

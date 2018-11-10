@@ -1,3 +1,4 @@
+/*
 package com.g2.androidapp.lotsoflots;
 
 import java.util.ArrayList;
@@ -57,3 +58,4 @@ public class SortingSystem {
 
 
 }
+*/

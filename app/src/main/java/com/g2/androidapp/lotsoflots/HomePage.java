@@ -23,7 +23,7 @@ public class HomePage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
         Button SearchBtn = (Button) findViewById(R.id.SearchBtn);
-        final Intent intent = new Intent(this, TestAutoComplete.class);
+        //final Intent intent = new Intent(this, TestAutoComplete.class);
         SearchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -42,7 +42,7 @@ public class HomePage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                startActivityForResult(intent , 1014);
+                //startActivityForResult(intent , 1014);
 
 
             }
