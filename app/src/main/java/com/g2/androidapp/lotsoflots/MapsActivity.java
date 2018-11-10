@@ -76,6 +76,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     final int LOCATION_PERMISSION_REQUEST_CODE = 21;
 
+    CarPark lastCarPark;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,9 +101,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                            currentLocation = location;
                            if(searched == false){
                                searchLocation(location);
+                               searched = true;
                            }
                        }
-
 
                     }
                 }
@@ -214,7 +216,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         // Set a listener for marker click.
         mMap.setOnMarkerClickListener(this);
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(singapore,10));
+        //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(singapore,10));
 
         Location targetLocation = new Location("");
 
@@ -304,9 +306,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
     private void searchLocation(Location location){
-        //listToDisplay = SortingSystem.sortCarParkbyDistance(new LatLng(location.getLatitude(),location.getLongitude()));
+        //listToDisplay = SortingSystem.sortCarParkbyDistance(new LatLng(location.getLatitude(),location.getLongitude())); TODO: add call to sorting
         listToDisplay = new ArrayList<>(0);
-        listToDisplay.add(new CarPark("E8","ABC",  Float.parseFloat("47.673"), Float.parseFloat("-122.121")));
+        listToDisplay.add(new CarPark("E8","ABC",  0, 0));
+        CarParkList.setCarparksList(listToDisplay);
+        listToDisplay.get(0).lat = 47.6739881;
+        listToDisplay.get(0).lng = -122.121512;
         for(int i = 0; i < listToDisplay.size(); i++){
             if(mMap!=null){
                 Marker mMarker;
@@ -341,7 +346,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 public void onClick(View view) {
                     // Show a toast message.
                     clickedItem = (LinearLayout) view;
-                    TextView tv = (TextView) clickedItem.getChildAt(0);
+                    TextView tv = (TextView) clickedItem.getChildAt(2);
                     Toast.makeText(MapsActivity.this, tv.getText(), Toast.LENGTH_SHORT).show();
                     showPin((String)tv.getText());
                 }
@@ -359,14 +364,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             TextView title = new TextView(this);
             TextView contents = new TextView(this);
+            TextView index = new TextView(this);
             title.setText(cpList.get(j).getName());
             title.setTypeface(title.getTypeface(), Typeface.BOLD_ITALIC);
             title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
             title.setPadding(5, 5, 5, 5);
             contents.setText("Vacancy: " + cpList.get(j).getVacancy());
             contents.setPadding(5, 5, 5, 20);
+            index.setText(cpList.get(j).getName());
+            index.setVisibility(View.INVISIBLE);
             itemLayout.addView(title);
             itemLayout.addView(contents);
+            itemLayout.addView(index);
 
             View v = new View(this);
             v.setLayoutParams(new LinearLayout.LayoutParams(
@@ -381,8 +390,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private void showPin(String carPark){
         CarPark cp = CarParkList.getCarParkList().get(CarParkList.findCarpark(carPark));
-        LatLng pos = new LatLng(cp.lat, cp.lng);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pos,17));
+        //LatLng pos = new LatLng(cp.lat, cp.lng);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cp.getLocation(),17));
         openDialog(cp);
     }
 
@@ -408,11 +417,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         msg.setTextColor(Color.BLACK);
         alertDialog.setView(msg);
 
+        lastCarPark= cp;
+
         // Set Button
         // you can more buttons
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL,"NAVIGATE", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 // Perform Action on Button
+                launchGoogleMaps(MapsActivity.this, lastCarPark.getLocation().latitude, lastCarPark.getLocation().longitude, lastCarPark.getName());
             }
         });
 
