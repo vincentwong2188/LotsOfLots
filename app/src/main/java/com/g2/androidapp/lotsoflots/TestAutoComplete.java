@@ -65,9 +65,11 @@ public class TestAutoComplete extends AppCompatActivity {
 
     public void printAddedBookmark(View view) {
         Intent intent = new Intent(TestAutoComplete.this,BookmarkPage.class);
+        //BookmarkData bookmarkData = new BookmarkData(finalPlace.getLatLng().toString(),finalPlace.getName().toString());
         BookmarkData bookmarkData = new BookmarkData(finalPlace.getLatLng(),finalPlace.getName().toString());
         ArrayList<BookmarkData> bookmarkDataList = new ArrayList<BookmarkData>();
         bookmarkDataList.add(new BookmarkData(finalPlace.getLatLng(),finalPlace.getName().toString()));
+        // bookmarkDataList.add(new BookmarkData(finalPlace.getLatLng().toString(),finalPlace.getName().toString()));
         SharedPreferences.Editor editor = getSharedPreferences("bookmarkData",MODE_PRIVATE).edit();
         sharedPreferences = getSharedPreferences("bookmarkss",MODE_PRIVATE);
         editor.putString("bookmark",gson.toJson(bookmarkDataList));

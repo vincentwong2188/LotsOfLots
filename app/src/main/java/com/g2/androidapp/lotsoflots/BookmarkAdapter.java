@@ -42,6 +42,7 @@ public class BookmarkAdapter extends ArrayAdapter<BookmarkData> {
 
         TextView textView = view.findViewById(R.id.bookmark_address);
         textView.setText(getItem(position).getName());
+        //textView.setText(getItem(position).name);
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
