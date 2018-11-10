@@ -1,15 +1,24 @@
 package com.g2.androidapp.lotsoflots;
 
+import android.util.Log;
+
 import java.util.ArrayList;
+
+import com.google.android.gms.maps.model.LatLng;
 
 public class SortingSystem {
 
 
+
+
     /** To sort Car Park List according to Proximity to User */
 
-    public static ArrayList<CarPark> sortCarParkbyDistance(LatLonCoordinate llc){
+    public static ArrayList<CarPark> sortCarParkbyDistance(LatLng llc){
 
         /** Code first takes into account the user's filter of distance */
+
+        Preference.setDistance("Lesser than 100m");
+
 
         double userDistance = Preference.getDistance();
         ArrayList<CarPark> temp = CarParkList.getCarParkList();
@@ -34,12 +43,17 @@ public class SortingSystem {
                 }
             }
         }
+
+
+        for(int m = 0; m < confirmed.size(); m++)
+        Log.d("Response","sorted carparks by distance is: " + confirmed.get(m).calcDistance(llc));
+
         return confirmed;
     }
 
     /** To sort Car Park List according to Vacancy Count */
 
-    public static ArrayList<CarPark> sortCarParkbyVacancy(LatLonCoordinate llc){
+    public static ArrayList<CarPark> sortCarParkbyVacancy(LatLng llc){
 
         /** Code first takes into account the user's filter of distance */
 
