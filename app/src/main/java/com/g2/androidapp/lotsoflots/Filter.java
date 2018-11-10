@@ -1,68 +1,111 @@
 package com.g2.androidapp.lotsoflots;
 
 
+import android.annotation.TargetApi;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.Spinner;
+import android.widget.TimePicker;
+import android.text.format.DateFormat;
 
-public class Filter extends AppCompatActivity {
-    String distance;
-    String price;
-    String time;Spinner distanceSpinner;Spinner priceSpinner;Spinner timeSpinner;
+
+import java.util.Calendar;
+
+
+
+public class Filter extends AppCompatActivity implements DatePickerDialog.OnDateSetListener,
+        TimePickerDialog.OnTimeSetListener {
+
+
+    //String[] choice =  new String[3];
+    String distance = null,  vacancy = null , sort = null, time;
+    Spinner distanceSpinner, vacancySpinner, sortSpinner;
+    Preference preference = new Preference();
+    int day,month,year,hour,minute,dayFinal,monthFinal,yearFinal,hourFinal,minuteFinal;
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
         makeSpinner();
-        String[] choice = obtainSelection();
+        obtainSelection();
+
         Button backButton = findViewById(R.id.backBtn);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                preference.setDistance(distance);
+                preference.setVacancy(vacancy);
+                preference.setTime(hourFinal , minuteFinal);
                 finish();
+            }
+        });
+        Button timeBtn = findViewById(R.id.timeBtn);
+        timeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar c = Calendar.getInstance();
+                year = c.get(Calendar.YEAR);
+                month = c.get(Calendar.MONTH);
+                day = c.get(Calendar.DAY_OF_MONTH);
+                DatePickerDialog datePickerDialog= new DatePickerDialog(Filter.this , Filter.this,
+                        year,month,day);
+                datePickerDialog.show();
             }
         });
 
     }
     public void makeSpinner(){
 
-        distanceSpinner = (Spinner) findViewById(R.id.distanceSpinner);
-        priceSpinner = (Spinner) findViewById(R.id.priceSpinner);
-        timeSpinner = (Spinner) findViewById(R.id.timeSpinner);
+        distanceSpinner = findViewById(R.id.distanceSpinner);
+        vacancySpinner =  findViewById(R.id.priceSpinner);
+        //timeSpinner = (Spinner) findViewById(R.id.timeSpinner);
+        sortSpinner = findViewById(R.id.sortSpinner);
         ArrayAdapter<String> distanceAdapter = new ArrayAdapter<String>(this , android.R.layout.simple_list_item_1,
                 getResources().getStringArray(R.array.distanceSpinnerNames));
         distanceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item );
         distanceSpinner.setAdapter(distanceAdapter);
 
-        ArrayAdapter<String> priceAdapter = new ArrayAdapter<String>(this , android.R.layout.simple_list_item_1,
-                getResources().getStringArray(R.array.priceSpinnerNames));
-        priceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item );
-        priceSpinner.setAdapter(priceAdapter);
+        ArrayAdapter<String> vacancyAdapter = new ArrayAdapter<String>(this , android.R.layout.simple_list_item_1,
+                getResources().getStringArray(R.array.vacancySpinnerNames));
+        vacancyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item );
+        vacancySpinner.setAdapter(vacancyAdapter);
 
-        ArrayAdapter<String> timeAdapter = new ArrayAdapter<String>(this , android.R.layout.simple_list_item_1,
+        /*ArrayAdapter<String> timeAdapter = new ArrayAdapter<String>(this , android.R.layout.simple_list_item_1,
                 getResources().getStringArray(R.array.timeSpinnerNames));
         timeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item );
-        timeSpinner.setAdapter(timeAdapter);
-        }
-        public String[] obtainSelection(){
-            distanceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    distance = distanceSpinner.getSelectedItem().toString();
-                }
+        timeSpinner.setAdapter(timeAdapter);*/
 
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-                    return;
-                }
-            });
-            timeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        ArrayAdapter<String> sortAdapter = new ArrayAdapter<String>(this , android.R.layout.simple_list_item_1,
+                getResources().getStringArray(R.array.sortSpinnerNames));
+        sortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item );
+        sortSpinner.setAdapter(sortAdapter);
+    }
+    public void obtainSelection(){
+        distanceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                distance = distanceSpinner.getSelectedItem().toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                return;
+            }
+
+        });
+            /*timeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     time = timeSpinner.getSelectedItem().toString();
@@ -72,22 +115,61 @@ public class Filter extends AppCompatActivity {
                 public void onNothingSelected(AdapterView<?> parent) {
                     return;
                 }
-            });
-            priceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    price = priceSpinner.getSelectedItem().toString();
-                }
+            });*/
+        vacancySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                vacancy = vacancySpinner.getSelectedItem().toString();
 
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-                    return;
-                }
-            });
-            String[] choice = new String[3];
-            choice[0] = distance;
-            choice[1] = time;
-            choice[2] = price;
-            return choice;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                return;
+            }
+        });
+        sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                sort = sortSpinner.getSelectedItem().toString();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                return;
+            }
+        });
+
+        //choice[0] = distance;
+        //choice[1] = vacancy;
+        //choice[2] = sort;
+
     }
+
+    @Override
+    public void onDateSet (DatePicker view, int year, int month, int dayOfMonth) {
+        yearFinal = year;
+        monthFinal = month+1;
+        dayFinal = dayOfMonth;
+        Calendar c = Calendar.getInstance();
+        hour = c.get(Calendar.HOUR_OF_DAY);
+        minute = c.get(Calendar.MINUTE);
+        TimePickerDialog timePickerDialog = new TimePickerDialog(Filter.this ,Filter.this,
+                hour, minute , DateFormat.is24HourFormat(this));
+        timePickerDialog.show();
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    public void onTimeSet(TimePicker view, int hourOfDay, int minuteOfDay) {
+        view.setIs24HourView(true);
+        hourFinal = view.getHour();
+        minuteFinal = view.getMinute();
+
+        String d = String.format("%2d%02d", hourOfDay, minuteOfDay);;
+        Log.i("ds",d);
+    }
+
 }

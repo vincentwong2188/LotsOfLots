@@ -3,20 +3,24 @@
     <string name="action_filter">Filter</string>
     <string name="title_activity_maps">Map</string>
 
+    <string name="confirm_selection">Confirm selection?</string>
+    <string name="confirm_yes">Yes</string>
+    <string name="confirm_cancel">Cancel</string>
+
+
     <string-array name="distanceSpinnerNames">
-        <item>Less than 1km</item>
-        <item>Between 1km to 5 km</item>
-        <item>More than 5KM</item>
+        <item>Lesser than 100m</item>
+        <item>Lesser than 500m</item>
+        <item>Lesser than 1km</item>
     </string-array>
-    <string-array name="priceSpinnerNames">
-        <item>$0.50 per hour</item>
-        <item>$1.00 per hour</item>
-        <item>$1.50 per hour</item>
-        <item>$2.00 per hour</item>
+    <string-array name="vacancySpinnerNames">
+        <item>Lesser than 10 free lots</item>
+        <item>Lesser than 50 free lots</item>
+        <item>Lesser than 200 free lots</item>
     </string-array>
-    <string-array name="timeSpinnerNames">
-        <item>Less than 30min</item>
-        <item>Between 30min and 1hour</item>
-        <item>More than 1hour</item>
+    <string-array name="sortSpinnerNames">
+        <item>Time</item>
+        <item>Distance</item>
+        <item>Vacancy</item>
     </string-array>
 </resources>

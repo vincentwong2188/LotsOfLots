@@ -50,10 +50,6 @@ public class SortingSystem {
 
         return carparks;
 
-
-
-
-
     }
 
 
