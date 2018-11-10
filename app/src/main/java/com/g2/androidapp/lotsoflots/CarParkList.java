@@ -37,9 +37,9 @@ public class CarParkList {
         return carpark;
     }*/
 
-     public static ArrayList<CarPark> getCarParkList(){
-         return carparksArrayList;
-     }
+    public static ArrayList<CarPark> getCarParkList(){
+        return carparksArrayList;
+    }
 
 
 }

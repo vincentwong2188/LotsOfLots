@@ -1,9 +1,10 @@
 package com.g2.androidapp.lotsoflots;
 
 import java.util.ArrayList;
+
 public class PreferenceStorage {
 
-    String Preference;
+    protected String Preference;
     private ArrayList<Preference> preferenceArrayList = new ArrayList<>(0);
 
 
