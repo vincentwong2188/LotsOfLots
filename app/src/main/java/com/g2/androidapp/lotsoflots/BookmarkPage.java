@@ -50,6 +50,14 @@ public class BookmarkPage extends AppCompatActivity {
             public void onClick(View v) {
             }
         });
+
+       /* Button ReturnHome = (Button) findViewById(R.id.ReturnHomeBtn);
+        ReturnHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(BookmarkPage.this, MapsActivity.class));
+            }
+        }); */
     }
 
     @Override
@@ -96,4 +104,5 @@ public class BookmarkPage extends AppCompatActivity {
         startActivityForResult(intent,1014);
 
     }
+
 }
