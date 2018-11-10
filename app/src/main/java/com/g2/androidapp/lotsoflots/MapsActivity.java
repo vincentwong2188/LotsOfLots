@@ -68,6 +68,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     case R.id.action_filter:
                         startActivity(new Intent(MapsActivity.this, Filter.class));
                         break;
+                    case R.id.action_bookmarks:
+                        startActivity(new Intent(MapsActivity.this, BookmarkPage.class));
+                        break;
                         //return true;
                     default:
                         //return super.onOptionsItemSelected(item);
@@ -105,7 +108,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
-        populateCarParkList();
+
 
         APIRetrieveSystem.retrieveCarParks(this);
 
@@ -121,6 +124,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onResume() {
         super.onResume();
         Intent receivedIntent = getIntent();
+        String sTargetLocation = receivedIntent.getStringExtra(""); //TODO: add in key for location from bookmarks
+        Location targetLocation = null;
+
+        if(targetLocation == null){
+            targetLocation = currentLocation;
+        }
+        populateCarParkList();
+
     }
 
     /**
@@ -244,6 +255,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return dp;
     }
 
+
+    private void searchLocation(Location location){
+
+    }
     private void populateCarParkList(){
         View bottomSheet = findViewById( R.id.bottom_sheet);
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
