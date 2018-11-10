@@ -15,9 +15,9 @@
         <item>Lesser than 1km</item>
     </string-array>
     <string-array name="vacancySpinnerNames">
-        <item>Lesser than 10 free lots</item>
-        <item>Lesser than 50 free lots</item>
-        <item>Lesser than 200 free lots</item>
+        <item>More than 1 free lots</item>
+        <item>More than 50 free lots</item>
+        <item>More than 200 free lots</item>
     </string-array>
     <string-array name="sortSpinnerNames">
         <item>Time</item>
