@@ -30,6 +30,10 @@ public class CarParkList {
         carparksArrayList.get(index).setVacancy(vacancy);
     }
 
+    public static void setCapacity(int cap, int index){
+        carparksArrayList.get(index).setCapacity(cap);
+    }
+
 
 
     public static ArrayList<CarPark> getCarParkList(){

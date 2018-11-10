@@ -14,6 +14,7 @@ public class CarPark {
     protected double lat;
     protected double lng;
     protected int vacancies;
+    protected int capacity;
 
 
     private String location;
@@ -49,16 +50,30 @@ public class CarPark {
 
 
     /** Method to get location in the CarPark class */
-    public String getLocation(){
-        return location;
+    public LatLonCoordinate getLocation(){
+        LatLonCoordinate latlonobject = new LatLonCoordinate(lat, lng);
+        return latlonobject;
+    }
+
+    public String getName(){
+        return carpark_number;
+    }
+
+    public int getCapacity(){
+        return capacity;
+    }
+
+    public void setCapacity(int cap){
+        capacity = cap;
     }
 
 
     /** Method to set location in the CarPark class */
 
-    public void setLocation(String Location){
+ /*   public void setLocation(String Location){
         this.location = Location;
     }
+*/
 
     /** Method to get number of Vacancies within CarPark*/
     public double getVacancy(){

@@ -144,7 +144,9 @@ public class APIRetrieveSystem {
                                 JSONObject carpark_infoobject = carpark_info.getJSONObject(0);
                                 Log.d("Response", "carpark_infoobject is: " + carpark_infoobject.toString());
                                 CarParkList.changeVacancy(carpark_infoobject.getInt("lots_available"), index);
+                                CarParkList.setCapacity(carpark_infoobject.getInt("total_lots"), index);
                                 Log.d("Response", "vacancies are: " + CarParkList.getCarParkList().get(index).vacancies);
+                                Log.d("Response", "capacity is: " + CarParkList.getCarParkList().get(index).capacity);
 
                             }
                         } catch (JSONException e){
