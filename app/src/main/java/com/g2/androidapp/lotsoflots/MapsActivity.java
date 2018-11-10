@@ -123,14 +123,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onResume() {
         super.onResume();
-        Intent receivedIntent = getIntent();
-        String sTargetLocation = receivedIntent.getStringExtra(""); //TODO: add in key for location from bookmarks
-        Location targetLocation = null;
+        //Intent receivedIntent = getIntent();
+        //String sTargetLocation = receivedIntent.getStringExtra(""); //TODO: add in key for location from bookmarks
+        Location targetLocation = new Location("");
 
         if(targetLocation == null){
-            targetLocation = currentLocation;
+            if(currentLocation != null){
+                targetLocation = currentLocation;
+            }else{
+                targetLocation.setLatitude(1.3493996);
+                targetLocation.setLongitude(103.68721149999999);
+            }
+
+        }else{
+            //String[] targetLocationBits = sTargetLocation.split(",");
+            //targetLocation.setLatitude(Double.parseDouble(targetLocationBits[0]));
+            //targetLocation.setLongitude(Double.parseDouble(targetLocationBits[1]));
         }
-        populateCarParkList();
+
+        searchLocation(targetLocation);
 
     }
 
@@ -230,24 +241,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             };
 
-//    private GoogleMap.OnMyLocationClickListener onMyLocationClickListener =
-//            new GoogleMap.OnMyLocationClickListener() {
-//                @Override
-//                public void onMyLocationClick(@NonNull Location location) {
-//
-//                    //mMap.setMinZoomPreference(12);
-//
-//                    CircleOptions circleOptions = new CircleOptions();
-//                    circleOptions.center(new LatLng(location.getLatitude(),
-//                            location.getLongitude()));
-//
-//                    circleOptions.radius(200);
-//                    circleOptions.fillColor(Color.RED);
-//                    circleOptions.strokeWidth(6);
-//
-//                    mMap.addCircle(circleOptions);
-//                }
-//            };
 
     private int pxToDP(int px){
         final float scale = findViewById(R.id.main_content).getContext().getResources().getDisplayMetrics().density;
@@ -258,6 +251,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void searchLocation(Location location){
 
+        populateCarParkList();
+        //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()),10));
     }
     private void populateCarParkList(){
         View bottomSheet = findViewById( R.id.bottom_sheet);
