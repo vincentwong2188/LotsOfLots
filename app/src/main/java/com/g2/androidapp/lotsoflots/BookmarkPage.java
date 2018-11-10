@@ -48,8 +48,17 @@ public class BookmarkPage extends AppCompatActivity {
         DeleteBookmark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
             }
         });
+
+       /* Button ReturnHome = (Button) findViewById(R.id.ReturnHomeBtn);
+        ReturnHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(BookmarkPage.this, MapsActivity.class));
+            }
+        }); */
     }
 
     @Override
@@ -84,7 +93,7 @@ public class BookmarkPage extends AppCompatActivity {
             bookmarkData.add(data.getName());
         }
 
-        BookmarkAdapter adapter = new BookmarkAdapter(getApplicationContext(),R.layout.bookmark_list_item,bookmarkData);
+        BookmarkAdapter adapter = new BookmarkAdapter(getApplicationContext(),R.layout.bookmark_list_item,bookmarkDataList);
         listView.setAdapter(adapter);
         listView.invalidate();
     }
@@ -96,4 +105,5 @@ public class BookmarkPage extends AppCompatActivity {
         startActivityForResult(intent,1014);
 
     }
+
 }

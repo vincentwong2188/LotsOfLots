@@ -45,6 +45,7 @@ public class Filter extends AppCompatActivity implements DatePickerDialog.OnDate
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 preference.setDistance(distance);
                 preference.setVacancy(vacancy);
                 preference.setTime(hourFinal , minuteFinal);
