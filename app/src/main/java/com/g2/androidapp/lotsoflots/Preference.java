@@ -9,8 +9,8 @@ import java.util.*;
 public class Preference {
     private static double distance;
     private static int vacancy;
-    private String time ;
-    private  String sort;
+    private static String time ;
+    private static String sort;
 
     public Preference(){
 
@@ -55,17 +55,17 @@ public class Preference {
 
     /** getting the price in Preference */
 
-    public double getVacancy() {
+    public static double getVacancy() {
         return vacancy;
 
     }
-    public void setSort(String sort) {
-        this.sort = sort;
+    public static void setSort(String sorts) {
+        sort = sorts;
     }
 
     /** getting the price in Preference */
 
-    public String getSort() {
+    public static String getSort() {
         return sort;
 
     }
@@ -79,7 +79,7 @@ public class Preference {
     }
 
     /** getting the time in Preference */
-    public String getTime() {
+    public static String getTime() {
         return time;
 
     }
