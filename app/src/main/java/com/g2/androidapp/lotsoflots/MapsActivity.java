@@ -1,11 +1,13 @@
 package com.g2.androidapp.lotsoflots;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Parcel;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
@@ -25,17 +27,16 @@ import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
-import com.google.android.gms.location.places.AutocompletePredictionBufferResponse;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.ArrayList;
 
@@ -46,6 +47,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GeoDataClient mGeoDataClient;
     private SearchSuggestion mSearchSuggestion;
     private ArrayList<CarPark> listToDisplay = new ArrayList<>(0);
+    private FusedLocationProviderClient mFusedLocationClient = null; // location provider
+    private Location currentLocation = null;
 
     final int LOCATION_PERMISSION_REQUEST_CODE = 21;
 
@@ -53,6 +56,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         final FloatingSearchView mSearchView = (FloatingSearchView) findViewById(R.id.floating_search_view);
 
@@ -63,12 +68,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     case R.id.action_filter:
                         startActivity(new Intent(MapsActivity.this, Filter.class));
                         break;
+                    case R.id.action_bookmarks:
+                        startActivity(new Intent(MapsActivity.this, BookmarkPage.class));
+                        break;
                         //return true;
                     default:
                         //return super.onOptionsItemSelected(item);
                 }
             }
         });
+
+        try{
+            mFusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+
+                @Override
+                public void onSuccess(Location location) {
+                    // Got last known location. In some rare situations this can be null.
+                    if (location != null) {
+                        // Logic to handle location object
+                        currentLocation = location;
+                    }
+                }
+
+            });
+        }catch(SecurityException e){
+            e.printStackTrace();
+        }
 
 
 
@@ -85,53 +110,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
 
-
-        //listToDisplay.add(new CarPark())
-
         APIRetrieveSystem.retrieveCarParks(this);
 
 
-
-        View bottomSheet = findViewById( R.id.bottom_sheet);
-        mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
-
-        mBottomSheetBehavior.setPeekHeight(pxToDP(70));
-        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-
-        LinearLayout scrollContents = findViewById(R.id.scrollContents);
-
-        for(int i = 1; i <= 20 ; i++){
-            LinearLayout itemLayout = new LinearLayout(this);
-
-            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.MATCH_PARENT,
-                    RelativeLayout.LayoutParams.WRAP_CONTENT
-            );
-
-            lp.setMargins(10,10,10,10);
-            itemLayout.setLayoutParams(lp);
-            itemLayout.setOrientation(LinearLayout.VERTICAL);
-
-            TextView title = new TextView(this);
-            TextView contents = new TextView(this);
-            title.setText("Title " + i);
-            title.setTypeface(title.getTypeface(), Typeface.BOLD_ITALIC);
-            title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
-            title.setPadding(5, 5, 5, 5);
-            contents.setText("my text " + i);
-            contents.setPadding(5, 5, 5, 20);
-            itemLayout.addView(title);
-            itemLayout.addView(contents);
-
-            View v = new View(this);
-            v.setLayoutParams(new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    1
-            ));
-            v.setBackgroundColor(Color.parseColor("#B3B3B3"));
-            itemLayout.addView(v);
-            scrollContents.addView(itemLayout);
-        }
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -139,7 +120,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Intent receivedIntent = getIntent();
+        String sTargetLocation = receivedIntent.getStringExtra(""); //TODO: add in key for location from bookmarks
+        Location targetLocation = null;
 
+        if(targetLocation == null){
+            targetLocation = currentLocation;
+        }
+        populateCarParkList();
+
+    }
 
     /**
      * Manipulates the map once available.
@@ -260,5 +253,52 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         final float scale = findViewById(R.id.main_content).getContext().getResources().getDisplayMetrics().density;
         int dp = (int) (px * scale + 0.5f);
         return dp;
+    }
+
+
+    private void searchLocation(Location location){
+
+    }
+    private void populateCarParkList(){
+        View bottomSheet = findViewById( R.id.bottom_sheet);
+        mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+
+        mBottomSheetBehavior.setPeekHeight(pxToDP(70));
+        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+
+        LinearLayout scrollContents = findViewById(R.id.scrollContents);
+
+        for(int i = 1; i <= 20 ; i++){
+            LinearLayout itemLayout = new LinearLayout(this);
+
+            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.MATCH_PARENT,
+                    RelativeLayout.LayoutParams.WRAP_CONTENT
+            );
+
+            lp.setMargins(10,10,10,10);
+            itemLayout.setLayoutParams(lp);
+            itemLayout.setOrientation(LinearLayout.VERTICAL);
+
+            TextView title = new TextView(this);
+            TextView contents = new TextView(this);
+            title.setText("Title " + i);
+            title.setTypeface(title.getTypeface(), Typeface.BOLD_ITALIC);
+            title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
+            title.setPadding(5, 5, 5, 5);
+            contents.setText("my text " + i);
+            contents.setPadding(5, 5, 5, 20);
+            itemLayout.addView(title);
+            itemLayout.addView(contents);
+
+            View v = new View(this);
+            v.setLayoutParams(new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    1
+            ));
+            v.setBackgroundColor(Color.parseColor("#B3B3B3"));
+            itemLayout.addView(v);
+            scrollContents.addView(itemLayout);
+        }
     }
 }
