@@ -40,13 +40,13 @@ public class Preference {
 
     public static void setVacancy(String Vacancy) {
         switch(Vacancy) {
-            case "Lesser than 10 free lots":
-                vacancy = 10;
+            case "More than 10 free lots":
+                vacancy = 1;
                 break;
-            case "Lesser than 50 free lots":
+            case "More than 50 free lots":
                 vacancy = 50;
                 break;
-            case "Lesser than 200 free lots":
+            case "More than 200 free lots":
                 vacancy = 200;
                 break;
 

@@ -23,6 +23,7 @@ public class TestAutoComplete extends AppCompatActivity {
     Place finalPlace;
     BookmarkPage bookmarkPage = new BookmarkPage();
     SharedPreferences sharedPreferences;
+    static int i = 0;
     private static Gson gson = new Gson();
 
     @Override
@@ -68,10 +69,14 @@ public class TestAutoComplete extends AppCompatActivity {
         ArrayList<BookmarkData> bookmarkDataList = new ArrayList<BookmarkData>();
         bookmarkDataList.add(new BookmarkData(finalPlace.getLatLng(),finalPlace.getName().toString()));
         SharedPreferences.Editor editor = getSharedPreferences("bookmarkData",MODE_PRIVATE).edit();
-        editor.putString("bookmarkData",gson.toJson(bookmarkDataList));
+        sharedPreferences = getSharedPreferences("bookmarkss",MODE_PRIVATE);
+        editor.putString("bookmark",gson.toJson(bookmarkDataList));
         editor.apply();
-
+        // Log.i("edw",sharedPreferences.getString(book,null) );
         startActivity(intent);
+    }
+    public void storeBookmarks(){
+
     }
 
 }
