@@ -75,19 +75,17 @@ public class MainActivity extends AppCompatActivity {
         //testing of API retrieval ends here
 
         //testing of sorting system starts here
-/*
 
         Button testsort_button = (Button) findViewById(R.id.testsort_button);
-        final TextView sort_output = (TextView) findViewById(R.id.sort_output);
 
         testsort_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                LatLng random = new LatLng(1.313776, 103.808797);
-                SortingSystem.sortCarParkbyDistance(random);
-                sort_output.setText("sorted!");
+                LatLng random = new LatLng(1.374363, 103.746769);
+                SortingSystem.sortCarParkbyVacancy(random);
+                testapi_output.setText("sorted!");
             }
-        });*/
+        });
 
         //testing of sorting system ends here
 

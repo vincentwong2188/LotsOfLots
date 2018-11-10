@@ -17,10 +17,12 @@ public class SortingSystem {
 
         /** Code first takes into account the user's filter of distance */
 
-        Preference.setDistance("Lesser than 100m");
+        Log.d("Response", "entered sorting method");
 
 
         double userDistance = Preference.getDistance();
+        //double userDistance = 10000;
+
         ArrayList<CarPark> temp = CarParkList.getCarParkList();
         ArrayList<CarPark> confirmed = new ArrayList<>();
 
@@ -30,6 +32,8 @@ public class SortingSystem {
                 confirmed.add(temp.get(k));
             }
         }
+
+        Log.d("Response", "preferences taken into account");
 
         for (int i=1; i< confirmed.size(); i++){
 
@@ -44,9 +48,16 @@ public class SortingSystem {
             }
         }
 
+        Log.d("Response", "insertion sorted!");
 
-        for(int m = 0; m < confirmed.size(); m++)
-        Log.d("Response","sorted carparks by distance is: " + confirmed.get(m).calcDistance(llc));
+        Log.d("Response", "size of array is: " + confirmed.size());
+
+
+        for(int m = 0; m < confirmed.size(); m++) {
+            Log.d("Response", "sorted carparks by distance is: " + confirmed.get(m).calcDistance(llc));
+            Log.d("Response", "sorted carparks by distance is: " + confirmed.get(m).carpark_address);
+        }
+
 
         return confirmed;
     }
@@ -58,6 +69,7 @@ public class SortingSystem {
         /** Code first takes into account the user's filter of distance */
 
         double userDistance = Preference.getDistance();
+        //double userDistance = 1000;
         ArrayList<CarPark> temp = CarParkList.getCarParkList();
         ArrayList<CarPark> confirmed = new ArrayList<>();
 
@@ -81,6 +93,11 @@ public class SortingSystem {
                     confirmed.set(j,temp2);
                 }
             }
+        }
+
+        for(int m = 0; m < confirmed.size(); m++) {
+            Log.d("Response", "sorted carparks by vacancy is: " + confirmed.get(m).vacancies);
+            Log.d("Response", "sorted carparks by vacancy address is: " + confirmed.get(m).carpark_address);
         }
         return confirmed;
 
