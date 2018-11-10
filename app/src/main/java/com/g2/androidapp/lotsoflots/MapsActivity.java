@@ -117,7 +117,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
     }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Intent receivedIntent = getIntent();
+    }
 
     /**
      * Manipulates the map once available.
