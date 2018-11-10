@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">LotsOfLots</string>
     <string name="action_filter">Filter</string>
+    <string name="action_bookmarks">Bookmarks</string>
     <string name="title_activity_maps">Map</string>
 
     <string name="confirm_selection">Confirm selection?</string>

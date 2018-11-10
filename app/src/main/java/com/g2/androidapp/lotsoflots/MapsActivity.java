@@ -49,6 +49,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ArrayList<CarPark> listToDisplay = new ArrayList<>(0);
     private FusedLocationProviderClient mFusedLocationClient = null; // location provider
     private Location currentLocation = null;
+    private Intent receivedIntent;
+    private String sTargetLocation = null;
+    private boolean searched = false;
 
     final int LOCATION_PERMISSION_REQUEST_CODE = 21;
 
@@ -68,6 +71,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     case R.id.action_filter:
                         startActivity(new Intent(MapsActivity.this, Filter.class));
                         break;
+                    case R.id.action_bookmarks:
+                        startActivity(new Intent(MapsActivity.this, BookmarkPage.class));
+                        break;
                         //return true;
                     default:
                         //return super.onOptionsItemSelected(item);
@@ -83,7 +89,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     // Got last known location. In some rare situations this can be null.
                     if (location != null) {
                         // Logic to handle location object
-                        currentLocation = location;
+                       if(currentLocation != location){
+                           currentLocation = location;
+                           if(searched == false){
+                               searchLocation(location);
+                           }
+                       }
+
+
                     }
                 }
 
@@ -105,7 +118,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
-        populateCarParkList();
+
 
         APIRetrieveSystem.retrieveCarParks(this);
 
@@ -117,7 +130,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
     }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        receivedIntent = getIntent();
+        sTargetLocation = receivedIntent.getStringExtra("BMT"); //TODO: add in key for location from bookmarks
+    }
 
     /**
      * Manipulates the map once available.
@@ -152,6 +170,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnMarkerClickListener(this);
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(singapore,10));
+
+        Location targetLocation = new Location("");
+
+        if(sTargetLocation == null){
+            if(currentLocation != null){
+                targetLocation = currentLocation;
+            }else{
+                targetLocation.setLatitude(1.3493996);
+                targetLocation.setLongitude(100.68721149999999);
+            }
+
+        }else{
+            String[] targetLocationBits = sTargetLocation.split(",");
+            targetLocation.setLatitude(Double.parseDouble(targetLocationBits[0]));
+            targetLocation.setLongitude(Double.parseDouble(targetLocationBits[1]));
+        }
+
+        searchLocation(targetLocation);
     }
 
     /** Called when the user clicks a marker. */
@@ -215,24 +251,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             };
 
-//    private GoogleMap.OnMyLocationClickListener onMyLocationClickListener =
-//            new GoogleMap.OnMyLocationClickListener() {
-//                @Override
-//                public void onMyLocationClick(@NonNull Location location) {
-//
-//                    //mMap.setMinZoomPreference(12);
-//
-//                    CircleOptions circleOptions = new CircleOptions();
-//                    circleOptions.center(new LatLng(location.getLatitude(),
-//                            location.getLongitude()));
-//
-//                    circleOptions.radius(200);
-//                    circleOptions.fillColor(Color.RED);
-//                    circleOptions.strokeWidth(6);
-//
-//                    mMap.addCircle(circleOptions);
-//                }
-//            };
 
     private int pxToDP(int px){
         final float scale = findViewById(R.id.main_content).getContext().getResources().getDisplayMetrics().density;
@@ -240,6 +258,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return dp;
     }
 
+
+    private void searchLocation(Location location){
+
+        populateCarParkList();
+        if(mMap != null){
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()),10));
+        }
+    }
     private void populateCarParkList(){
         View bottomSheet = findViewById( R.id.bottom_sheet);
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);

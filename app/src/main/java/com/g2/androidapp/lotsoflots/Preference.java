@@ -16,16 +16,16 @@ public class Preference {
 
     }
     /** setting distance in preference*/
-    public void setDistance(String distance) {
-        switch(distance){
+    public static void setDistance(String dist) {
+        switch(dist){
             case "Lesser than 100m":
-                this.distance = 100;
+                distance = 100;
                 break;
             case "Lesser than 500m":
-                this.distance = 500;
+                distance = 500;
                 break;
             case "Lesser than 1km":
-                this.distance = 1000;
+                distance = 1000;
                 break;
         }
 

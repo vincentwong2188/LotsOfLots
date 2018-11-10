@@ -89,10 +89,10 @@ public class CarPark {
 
 
 
-public  float calcDistance(LatLonCoordinate currentloc){
+public  float calcDistance(LatLng currentloc){
     Location currentloc2 = new Location("");
-    currentloc2.setLatitude(currentloc.getLatitude());
-    currentloc2.setLongitude(currentloc.getLongitude());
+    currentloc2.setLatitude(currentloc.latitude);
+    currentloc2.setLongitude(currentloc.longitude);
 
     Location carparkloc = new Location("");
     carparkloc.setLatitude(lat);

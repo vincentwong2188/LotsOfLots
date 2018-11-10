@@ -38,7 +38,7 @@ public class APIRetrieveSystem {
         Log.d("Response","carpark retrieval success");
         // then we fill the vacancies, where we have to do a key match
         retrieveVacancies(date_time, context);
-
+        Log.d("Response","carpark vacancy retrieval success");
     }
 
     static void retrieveCarParks(Context context){
@@ -85,7 +85,7 @@ public class APIRetrieveSystem {
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
-                                Log.e("Response", "exception", e);
+                                //Log.e("Response", "exception", e);
                             }
 
 
@@ -128,25 +128,25 @@ public class APIRetrieveSystem {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("Response", response.toString());
+                        //Log.d("Response", response.toString());
                         try{
                             JSONArray items = response.getJSONArray("items");
                             JSONObject itemsobject = items.getJSONObject(0);
                             JSONArray carpark_data = itemsobject.getJSONArray("carpark_data");
-                            Log.d("Response", "carparkdata are: " + carpark_data.toString());
-                            Log.d("Response", "number of carparkdata entries are: "+ carpark_data.length());
+                            //Log.d("Response", "carparkdata are: " + carpark_data.toString());
+                            //Log.d("Response", "number of carparkdata entries are: "+ carpark_data.length());
                             for(int i = 0; i < carpark_data.length(); i++){
                                 JSONObject temp = carpark_data.getJSONObject(i);
                                 int index = CarParkList.findCarpark(temp.getString("carpark_number"));
-                                Log.d("Response", "the index is: "+ index);
+                                //Log.d("Response", "the index is: "+ index);
 
                                 JSONArray carpark_info = temp.getJSONArray("carpark_info");
                                 JSONObject carpark_infoobject = carpark_info.getJSONObject(0);
-                                Log.d("Response", "carpark_infoobject is: " + carpark_infoobject.toString());
+                                //Log.d("Response", "carpark_infoobject is: " + carpark_infoobject.toString());
                                 CarParkList.changeVacancy(carpark_infoobject.getInt("lots_available"), index);
                                 CarParkList.setCapacity(carpark_infoobject.getInt("total_lots"), index);
-                                Log.d("Response", "vacancies are: " + CarParkList.getCarParkList().get(index).vacancies);
-                                Log.d("Response", "capacity is: " + CarParkList.getCarParkList().get(index).capacity);
+                                //Log.d("Response", "vacancies are: " + CarParkList.getCarParkList().get(index).vacancies);
+                                //Log.d("Response", "capacity is: " + CarParkList.getCarParkList().get(index).capacity);
 
                             }
                         } catch (JSONException e){
