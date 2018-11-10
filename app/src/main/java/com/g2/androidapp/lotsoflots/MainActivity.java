@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         mapsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, BookmarkPage.class));
+                startActivity(new Intent(MainActivity.this, MapsActivity.class));
             }
         });
 
