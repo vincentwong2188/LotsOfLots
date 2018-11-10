@@ -50,8 +50,8 @@ public class CarPark {
 
 
     /** Method to get location in the CarPark class */
-    public LatLonCoordinate getLocation(){
-        LatLonCoordinate latlonobject = new LatLonCoordinate(lat, lng);
+    public LatLng getLocation(){
+        LatLng latlonobject = new LatLng(lat, lng);
         return latlonobject;
     }
 
