@@ -76,7 +76,7 @@ public class CarPark {
 */
 
     /** Method to get number of Vacancies within CarPark*/
-    public double getVacancy(){
+    public int getVacancy(){
         return vacancies;
 
     }

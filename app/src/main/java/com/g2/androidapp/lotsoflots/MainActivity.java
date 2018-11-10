@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 LatLng random = new LatLng(1.374363, 103.746769);
-                SortingSystem.sortCarParkbyVacancy(random);
+                SortingSystem.sortCarParkbyDistance(random);
                 testapi_output.setText("sorted!");
             }
         });

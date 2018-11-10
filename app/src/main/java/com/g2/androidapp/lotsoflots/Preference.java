@@ -55,7 +55,7 @@ public class Preference {
 
     /** getting the price in Preference */
 
-    public static double getVacancy() {
+    public static int getVacancy() {
         return vacancy;
 
     }
