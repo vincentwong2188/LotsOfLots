@@ -49,6 +49,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ArrayList<CarPark> listToDisplay = new ArrayList<>(0);
     private FusedLocationProviderClient mFusedLocationClient = null; // location provider
     private Location currentLocation = null;
+    private Intent receivedIntent;
+    private String sTargetLocation = null;
+    private boolean searched = false;
 
     final int LOCATION_PERMISSION_REQUEST_CODE = 21;
 
@@ -86,7 +89,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     // Got last known location. In some rare situations this can be null.
                     if (location != null) {
                         // Logic to handle location object
-                        currentLocation = location;
+                       if(currentLocation != location){
+                           currentLocation = location;
+                           if(searched == false){
+                               searchLocation(location);
+                           }
+                       }
+
+
                     }
                 }
 
@@ -123,26 +133,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onResume() {
         super.onResume();
-        //Intent receivedIntent = getIntent();
-        //String sTargetLocation = receivedIntent.getStringExtra(""); //TODO: add in key for location from bookmarks
-        Location targetLocation = new Location("");
-
-        if(targetLocation == null){
-            if(currentLocation != null){
-                targetLocation = currentLocation;
-            }else{
-                targetLocation.setLatitude(1.3493996);
-                targetLocation.setLongitude(103.68721149999999);
-            }
-
-        }else{
-            //String[] targetLocationBits = sTargetLocation.split(",");
-            //targetLocation.setLatitude(Double.parseDouble(targetLocationBits[0]));
-            //targetLocation.setLongitude(Double.parseDouble(targetLocationBits[1]));
-        }
-
-        searchLocation(targetLocation);
-
+        receivedIntent = getIntent();
+        sTargetLocation = receivedIntent.getStringExtra("BMT"); //TODO: add in key for location from bookmarks
     }
 
     /**
@@ -178,6 +170,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnMarkerClickListener(this);
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(singapore,10));
+
+        Location targetLocation = new Location("");
+
+        if(sTargetLocation == null){
+            if(currentLocation != null){
+                targetLocation = currentLocation;
+            }else{
+                targetLocation.setLatitude(1.3493996);
+                targetLocation.setLongitude(100.68721149999999);
+            }
+
+        }else{
+            String[] targetLocationBits = sTargetLocation.split(",");
+            targetLocation.setLatitude(Double.parseDouble(targetLocationBits[0]));
+            targetLocation.setLongitude(Double.parseDouble(targetLocationBits[1]));
+        }
+
+        searchLocation(targetLocation);
     }
 
     /** Called when the user clicks a marker. */
@@ -252,7 +262,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void searchLocation(Location location){
 
         populateCarParkList();
-        //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()),10));
+        if(mMap != null){
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()),10));
+        }
     }
     private void populateCarParkList(){
         View bottomSheet = findViewById( R.id.bottom_sheet);
