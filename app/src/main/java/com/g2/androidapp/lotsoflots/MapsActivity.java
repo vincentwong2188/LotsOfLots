@@ -1,28 +1,35 @@
 package com.g2.androidapp.lotsoflots;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Parcel;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
@@ -45,6 +52,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.ArrayList;
@@ -203,12 +211,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         LatLng singapore = new LatLng(1.3521, 103.8198);
 
-        for(int i = 0; i < listToDisplay.size(); i++){
-            Marker mMarker;
-            //mMarker = mMap.addMarker(new MarkerOptions().position(listToDisplay.get(i).getLocation()).title(listToDisplay.get(i).carpark_number));
-            //mMarker.setTag(listToDisplay.get(i));
-        }
-
         // Set a listener for marker click.
         mMap.setOnMarkerClickListener(this);
 
@@ -239,7 +241,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         // Retrieve the data from the marker.
         CarPark cp = (CarPark) marker.getTag();
-
+        showPin(cp.getName());
 
 
         // Return false to indicate that we have not consumed the event and that we wish
@@ -302,13 +304,24 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
     private void searchLocation(Location location){
+        //listToDisplay = SortingSystem.sortCarParkbyDistance(new LatLng(location.getLatitude(),location.getLongitude()));
+        listToDisplay = new ArrayList<>(0);
+        listToDisplay.add(new CarPark("E8","ABC",  Float.parseFloat("47.673"), Float.parseFloat("-122.121")));
+        for(int i = 0; i < listToDisplay.size(); i++){
+            if(mMap!=null){
+                Marker mMarker;
+                mMarker = mMap.addMarker(new MarkerOptions().position(listToDisplay.get(i).getLocation()).title(listToDisplay.get(i).carpark_number));
+                mMarker.setTag(listToDisplay.get(i));
+            }
 
-        populateCarParkList();
+        }
+        populateCarParkList(listToDisplay);
         if(mMap != null){
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()),14));
         }
     }
-    private void populateCarParkList(){
+
+    private void populateCarParkList(ArrayList<CarPark> cpList){
         View bottomSheet = findViewById( R.id.bottom_sheet);
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
 
@@ -319,7 +332,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         scrollContents.removeAllViewsInLayout();
 
-        for(int i = 1; i <= 20 ; i++){
+        for(int j = 0; j < cpList.size(); j++){
             LinearLayout itemLayout = new LinearLayout(this);
 
             // Implement it's on click listener.
@@ -328,9 +341,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 public void onClick(View view) {
                     // Show a toast message.
                     clickedItem = (LinearLayout) view;
-                    TextView tv = (TextView) clickedItem.getChildAt(1);
+                    TextView tv = (TextView) clickedItem.getChildAt(0);
                     Toast.makeText(MapsActivity.this, tv.getText(), Toast.LENGTH_SHORT).show();
-                    showPin("E8");
+                    showPin((String)tv.getText());
                 }
             });
 
@@ -346,11 +359,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             TextView title = new TextView(this);
             TextView contents = new TextView(this);
-            title.setText("Title " + i);
+            title.setText(cpList.get(j).getName());
             title.setTypeface(title.getTypeface(), Typeface.BOLD_ITALIC);
             title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
             title.setPadding(5, 5, 5, 5);
-            contents.setText("my text " + i);
+            contents.setText("Vacancy: " + cpList.get(j).getVacancy());
             contents.setPadding(5, 5, 5, 20);
             itemLayout.addView(title);
             itemLayout.addView(contents);
@@ -367,6 +380,71 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void showPin(String carPark){
+        CarPark cp = CarParkList.getCarParkList().get(CarParkList.findCarpark(carPark));
+        LatLng pos = new LatLng(cp.lat, cp.lng);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pos,17));
+        openDialog(cp);
+    }
 
+    public void openDialog(CarPark cp) {
+
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+
+        // Set Custom Title
+        TextView title = new TextView(this);
+        // Title Properties
+        title.setText("CarPark " + cp.getName());
+        title.setPadding(10, 10, 10, 10);   // Set Position
+        title.setGravity(Gravity.CENTER);
+        title.setTextColor(Color.BLACK);
+        title.setTextSize(20);
+        alertDialog.setCustomTitle(title);
+
+        // Set Message
+        TextView msg = new TextView(this);
+        // Message Properties
+        msg.setText("Vacancies: " + cp.getVacancy() + "/" + cp.getCapacity() + "\n" + "Do you wish to navigate to the car park?");
+        msg.setGravity(Gravity.CENTER_HORIZONTAL);
+        msg.setTextColor(Color.BLACK);
+        alertDialog.setView(msg);
+
+        // Set Button
+        // you can more buttons
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL,"NAVIGATE", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // Perform Action on Button
+            }
+        });
+
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE,"CANCEL", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // Perform Action on Button
+            }
+        });
+
+        new Dialog(getApplicationContext());
+        alertDialog.show();
+
+        // Set Properties for OK Button
+        final Button okBT = alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL);
+        LinearLayout.LayoutParams neutralBtnLP = (LinearLayout.LayoutParams) okBT.getLayoutParams();
+        neutralBtnLP.gravity = Gravity.FILL_HORIZONTAL;
+        okBT.setPadding(50, 10, 10, 10);   // Set Position
+        okBT.setTextColor(Color.BLUE);
+        okBT.setLayoutParams(neutralBtnLP);
+
+        final Button cancelBT = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+        LinearLayout.LayoutParams negBtnLP = (LinearLayout.LayoutParams) okBT.getLayoutParams();
+        negBtnLP.gravity = Gravity.FILL_HORIZONTAL;
+        cancelBT.setTextColor(Color.RED);
+        cancelBT.setLayoutParams(negBtnLP);
+    }
+
+    public static void launchGoogleMaps(Context context, double latitude, double longitude, String label) {
+        String format = "geo:0,0?q=" + Double.toString(latitude) + "," + Double.toString(longitude) + "(" + label + ")";
+        Uri uri = Uri.parse(format);
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        context.startActivity(intent);
     }
 }
