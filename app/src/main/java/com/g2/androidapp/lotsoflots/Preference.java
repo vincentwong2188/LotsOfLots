@@ -7,9 +7,11 @@ import java.util.*;
 
 
 public class Preference {
-    private int distance, vacancy;
+    private static double distance;
+    private static int vacancy;
     private String time ;
     private  String sort;
+
     public Preference(){
 
     }
@@ -29,23 +31,23 @@ public class Preference {
 
     }
     /** getting the distance in Preference */
-    public double getDistance() {
+    public static double getDistance() {
         return distance;
 
     }
 
     /** setting price in preference*/
 
-    public void setVacancy(String Vacancy) {
+    public static void setVacancy(String Vacancy) {
         switch(Vacancy) {
             case "Lesser than 10 free lots":
-                this.vacancy = 10;
+                vacancy = 10;
                 break;
             case "Lesser than 50 free lots":
-                this.vacancy = 50;
+                vacancy = 50;
                 break;
             case "Lesser than 200 free lots":
-                this.vacancy = 200;
+                vacancy = 200;
                 break;
 
         }

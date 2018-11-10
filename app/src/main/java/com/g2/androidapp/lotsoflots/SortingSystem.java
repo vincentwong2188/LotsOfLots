@@ -1,57 +1,76 @@
-/*
 package com.g2.androidapp.lotsoflots;
 
 import java.util.ArrayList;
 
 public class SortingSystem {
 
-    private ArrayList<CarPark> carparks;
 
+    /** To sort Car Park List according to Proximity to User */
 
-    public static ArrayList<CarPark> sortCarParkbyDistance(ArrayList<CarPark> carparks){
+    public static ArrayList<CarPark> sortCarParkbyDistance(LatLonCoordinate llc){
 
-        for (int i=1; i< carparks.size(); i++){
+        /** Code first takes into account the user's filter of distance */
 
-            for (int j=1 ; j>0; j++){
+        double userDistance = Preference.getDistance();
+        ArrayList<CarPark> temp = CarParkList.getCarParkList();
+        ArrayList<CarPark> confirmed = new ArrayList<>();
 
-                if (carparks.get(j).calcDistance() < carparks.get(j-1).calcDistance()){ // need to get current location (lat and longitude from either SC or Darrence)
+        for (int k=0; k < temp.size(); k++){
 
-                    CarPark temp = carparks.get(j-1);
-                    carparks.set(j-1,carparks.get(j));
-                    carparks.set(j,temp);
-
-                }
-
+            if (temp.get(k).calcDistance(llc) <= userDistance){
+                confirmed.add(temp.get(k));
             }
-
         }
 
-        return carparks;
+        for (int i=1; i< confirmed.size(); i++){
 
+            for (int j=i ; j>0; j--){
+
+                if (confirmed.get(j).calcDistance(llc) < confirmed.get(j-1).calcDistance(llc)){
+
+                    CarPark temp2 = confirmed.get(j-1);
+                    confirmed.set(j-1,confirmed.get(j));
+                    confirmed.set(j,temp2);
+                }
+            }
+        }
+        return confirmed;
     }
 
-    public static ArrayList<CarPark> sortCarParkbyVacancy(ArrayList<CarPark> carparks){
+    /** To sort Car Park List according to Vacancy Count */
 
-        for (int i=1; i< carparks.size(); i++){
+    public static ArrayList<CarPark> sortCarParkbyVacancy(LatLonCoordinate llc){
 
-            for (int j=1 ; j>0; j++){
+        /** Code first takes into account the user's filter of distance */
 
-                if (carparks.get(j).getVacancy() < carparks.get(j-1).getVacancy()){
+        double userDistance = Preference.getDistance();
+        ArrayList<CarPark> temp = CarParkList.getCarParkList();
+        ArrayList<CarPark> confirmed = new ArrayList<>();
 
-                    CarPark temp = carparks.get(j-1);
-                    carparks.set(j-1,carparks.get(j));
-                    carparks.set(j,temp);
+        for (int k=0; k < temp.size(); k++ ){
 
-                }
-
+            if (temp.get(k).calcDistance(llc) <= userDistance){
+                confirmed.add(temp.get(k));
             }
-
         }
 
-        return carparks;
+        /** Code then sorts the filtered Car Park list according to vacancy count*/
+
+        for (int i=1; i< confirmed.size(); i++){
+
+            for (int j=i ; j>0; j--){
+
+                if (confirmed.get(j).getVacancy() > confirmed.get(j-1).getVacancy()){
+
+                    CarPark temp2 = confirmed.get(j-1);
+                    confirmed.set(j-1,confirmed.get(j));
+                    confirmed.set(j,temp2);
+                }
+            }
+        }
+        return confirmed;
 
     }
 
 
 }
-*/
