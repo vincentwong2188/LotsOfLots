@@ -1,4 +1,4 @@
-package com.g2.androidapp.lotsoflots;
+/*package com.g2.androidapp.lotsoflots;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -32,3 +32,4 @@ public class InitialView {
 
     }
 }
+*/
