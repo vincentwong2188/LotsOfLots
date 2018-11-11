@@ -15,6 +15,8 @@ import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.time.Instant;
+
 public class MainActivity extends AppCompatActivity {
 
     final static String TAG = "Main";
@@ -67,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
                //testapi_output.setText(Instant.now().toString());
 
 
-                APIRetrieveSystem.retrieveall(MainActivity.this);
+                APIRetrieveSystem.retrieveall("2011", MainActivity.this);
                testapi_output.setText("ran!");
             }
         });
@@ -82,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 LatLng random = new LatLng(1.374363, 103.746769);
-                SortingSystem.sortCarParkbyVacancy(random);
+                SortingSystem.sortCarParkbyDistance(random);
                 testapi_output.setText("sorted!");
             }
         });

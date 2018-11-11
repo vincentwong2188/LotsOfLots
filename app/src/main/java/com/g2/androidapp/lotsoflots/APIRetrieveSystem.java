@@ -2,6 +2,9 @@ package com.g2.androidapp.lotsoflots;
 
 import android.app.VoiceInteractor;
 import android.content.Context;
+import android.icu.text.DateFormat;
+import android.icu.text.SimpleDateFormat;
+import android.icu.util.Calendar;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -15,7 +18,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.time.Instant;
+import java.util.Date;
 
 public class APIRetrieveSystem {
 
@@ -27,12 +32,46 @@ public class APIRetrieveSystem {
 
     }
 
-    static void retrieveall(Context context){
+
+    static String converttime(String time){
+        //converts current time and date to a week ago
         String timeStamp = Instant.now().toString();
-        retrieveall(timeStamp, context);
+        String currentdate = timeStamp.substring(0, 11);
+        String inputdatetime = currentdate + time.substring(0, 2) + ":" + time.substring(2, 4) + ":00.838+0800Z";
+        Log.d("Response", inputdatetime);
+        Date date = null;
+        try {
+            date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").parse(inputdatetime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Log.d("Response", "the date is: " + date.toString());
+
+        //1 week ago
+        long DAY_IN_MS = 1000 * 60 * 60 * 24;
+        Date past = new Date(date.getTime() - (7 * DAY_IN_MS));
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        String strpast = dateFormat.format(past);
+        Log.d("Response", "a week ago it was: " + strpast);
+        strpast = strpast.substring(0, 19);
+        Log.d("Response", "a week ago it was: " + strpast);
+
+        return strpast;
+
     }
 
-    static void retrieveall(String date_time, Context context){
+
+    static void retrieveall(Context context){
+        String timeStamp = Instant.now().toString();
+        Log.d("Response", "timestamp is: " + timeStamp.substring(0, 19));
+        retrieveall(timeStamp.substring(0, 19), context);
+
+    }
+
+    static void retrieveall(String time, Context context){
+
+        String date_time = converttime(time);
+
         //first we fill the carpark list array with carpark objects (with no vacancies yet)
         retrieveCarParks(context);
         Log.d("Response","carpark retrieval success");
@@ -75,12 +114,6 @@ public class APIRetrieveSystem {
                                     //Log.d("Response", "temp is " + temp.toString());
                                     CarPark entry = new CarPark(temp.getString("car_park_no"), temp.getString("address"), (float) temp.getDouble("x_coord"), (float) temp.getDouble("y_coord"));
                                     //Log.d("Response", "temp is " + entry.carpark_address);
-           /*                   entry.carpark_address = temp.getString("address");
-                                entry.carpark_number = temp.getString("car_park_no");
-                                entry.x_coord = (float) temp.getDouble("x_coord");
-                                entry.y_coord = (float) temp.getDouble("y_coord");
-                                entry.lat = CoordinateConverter.convert(entry.y_coord, entry.x_coord).getLatitude();
-                                entry.lng = CoordinateConverter.convert(entry.y_coord, entry.x_coord).getLongitude();*/
                                     CarParkList.addCarPark(entry);
                                 }
                             } catch (JSONException e) {
@@ -116,6 +149,7 @@ public class APIRetrieveSystem {
 
         String URL = "https://api.data.gov.sg/v1/transport/carpark-availability?date_time=";
         String ReqURL = URL + date_time;
+
 
         //create a request queue
         RequestQueue requestQueue=Volley.newRequestQueue(context);
@@ -160,7 +194,7 @@ public class APIRetrieveSystem {
                     public void onErrorResponse(VolleyError error) {
                     }
                 }
-                );
+        );
 
         requestQueue.add(objectRequest);
 
