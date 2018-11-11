@@ -9,20 +9,15 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
-import android.location.LocationManager;
 import android.net.Uri;
-import android.os.Parcel;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
@@ -32,12 +27,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.arlib.floatingsearchview.FloatingSearchView;
-import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
@@ -62,7 +54,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private GoogleMap mMap;
     private BottomSheetBehavior mBottomSheetBehavior;
     private GeoDataClient mGeoDataClient;
-    private SearchSuggestion mSearchSuggestion;
     private ArrayList<CarPark> listToDisplay = new ArrayList<>(0);
     private FusedLocationProviderClient mFusedLocationClient = null; // location provider
     private Location currentLocation = null;
@@ -71,8 +62,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private boolean searched = false;
     LinearLayout clickedItem;
     private int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
-
-    private SearchSuggestionsAdapter mSearchResultsAdapter;
 
     final int LOCATION_PERMISSION_REQUEST_CODE = 21;
 
