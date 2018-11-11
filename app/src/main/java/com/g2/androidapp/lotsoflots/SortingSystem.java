@@ -22,7 +22,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class SortingSystem {
 
-    public static ArrayList<CarPark> sortCarParks(LatLng llc) {
+    public static ArrayList<CarPark> sortCarparks(LatLng llc) {
 
         ArrayList<CarPark> sortedCarparks = new ArrayList<CarPark>();
 
@@ -44,8 +44,8 @@ public class SortingSystem {
     public static ArrayList<CarPark> sortCarParkbyDistance(LatLng llc) {
 
         /** Code first takes into account the user's filter of distance */
-        //double userDistance = Preference.getDistance();
-        double userDistance = 1000;
+        double userDistance = Preference.getDistance();
+        //double userDistance = 1000;
 
         /** Code then takes into account the user's filter of vacancies */
         //int userVacancy = Preference.getVacancy();
@@ -102,11 +102,15 @@ public class SortingSystem {
 
 
         /** Printing elements in the array in Logcat */
+        /*
+
         for (int m = 0; m < confirmed3.size(); m++) {
             Log.d("Response", "sorted carparks by distance is: " + confirmed3.get(m).calcDistance(llc));
             Log.d("Response", "carpark vacancy is: " + confirmed3.get(m).vacancies);
             Log.d("Response", "sorted carparks by distance is: " + confirmed3.get(m).carpark_address);
         }
+
+        */
 
 
         /** Return Value */
@@ -121,12 +125,12 @@ public class SortingSystem {
     public static ArrayList<CarPark> sortCarParkbyVacancy(LatLng llc) {
 
         /** Code first takes into account the user's filter of distance */
-        //double userDistance = Preference.getDistance();
-        double userDistance = 1000;
+        double userDistance = Preference.getDistance();
+        //double userDistance = 1000;
 
         /** Code then takes into account the user's filter of vacancies */
-        //int userVacancy = Preference.getVacancy();
-        int userVacancy = 200;
+        int userVacancy = Preference.getVacancy();
+        //int userVacancy = 200;
 
         /** Instantiation of CarPark ArrayLists to be used in the sorting algorithm */
         ArrayList<CarPark> temp = CarParkList.getCarParkList();
@@ -178,11 +182,15 @@ public class SortingSystem {
             }
         }
 
+        /*
+
         for (int m = 0; m < confirmed3.size(); m++) {
             Log.d("Response", "sorted carparks by distance is: " + confirmed3.get(m).calcDistance(llc));
             Log.d("Response", "sorted carparks by vacancy is: " + confirmed3.get(m).vacancies);
             Log.d("Response", "sorted carparks by vacancy address is: " + confirmed3.get(m).carpark_address);
         }
+
+        */
 
         return confirmed3;
 
