@@ -20,4 +20,8 @@ public class BookmarkData {
     public String getName() {
         return name;
     }
+
+    public String getLatlng() {
+        return latlng;
+    }
 }
