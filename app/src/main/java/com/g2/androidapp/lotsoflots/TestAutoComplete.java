@@ -86,7 +86,13 @@ public class TestAutoComplete extends AppCompatActivity {
         // SharedPreferences.Editor editor = getSharedPreferences("bookmarkData",MODE_PRIVATE).edit();
 //        editor.putString("bookmark",gson.toJson(bookmarkDataList));
 //        editor.apply();
-        storeBookmarks(editor,i,bookmarkDataList);
+        if (bookmarkDataList.size() == 0){
+            editor.putString("bookmarkData","");
+            editor.apply();
+        }
+        else {
+            storeBookmarks(editor,i,bookmarkDataList);
+        }
         i++;
         startActivity(intent);
     }
