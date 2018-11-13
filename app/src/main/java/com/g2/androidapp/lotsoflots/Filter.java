@@ -168,9 +168,6 @@ public class Filter extends AppCompatActivity implements DatePickerDialog.OnDate
         view.setIs24HourView(true);
         hourFinal = view.getHour();
         minuteFinal = view.getMinute();
-
-        String d = String.format("%2d%02d", hourOfDay, minuteOfDay);;
-        Log.i("ds",d);
     }
 
 }
