@@ -52,13 +52,13 @@ public class BookmarkPage extends AppCompatActivity {
             }
         });
 
-       /* Button ReturnHome = (Button) findViewById(R.id.ReturnHomeBtn);
+       Button ReturnHome = (Button) findViewById(R.id.ReturnHomeBtn);
         ReturnHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(BookmarkPage.this, MapsActivity.class));
             }
-        }); */
+        }); 
     }
 
     @Override
@@ -85,8 +85,8 @@ public class BookmarkPage extends AppCompatActivity {
         Log.d("Bookmark",preferenceData);
 
 
-        if (preferenceData != "Not available") {
-            bookmarkDataList = gson.fromJson(preferenceData,new TypeToken<ArrayList<BookmarkData>>(){}.getType());
+        if (preferenceData != "Not available" && preferenceData != "") {
+            bookmarkDataList = gson.fromJson(preferenceData,new TypeToken<List<BookmarkData>>(){}.getType());
         }
 
         for (BookmarkData data : bookmarkDataList){

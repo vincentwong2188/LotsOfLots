@@ -14,6 +14,7 @@ import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 
@@ -64,82 +65,105 @@ public class TestAutoComplete extends AppCompatActivity {
     }
 
     public void printAddedBookmark(View view) {
-        Intent intent = new Intent(TestAutoComplete.this,BookmarkPage.class);
-        BookmarkData bookmarkData = new BookmarkData(finalPlace.getLatLng(),finalPlace.getName().toString());
-        ArrayList<BookmarkData> bookmarkDataList = new ArrayList<BookmarkData>();
-        bookmarkDataList.add(new BookmarkData(finalPlace.getLatLng(),finalPlace.getName().toString()));
-
+        ArrayList<BookmarkData> bookmarkDataList;
+        sharedPreferences = getSharedPreferences("bookmarkData",MODE_PRIVATE);
         SharedPreferences.Editor editor = getSharedPreferences("bookmarkData",MODE_PRIVATE).edit();
-        editor.putString("bookmark",gson.toJson(bookmarkDataList));
-        editor.apply();
-        storeBookmarks(editor,i,bookmarkDataList);
+
+        String sharedPrefData = sharedPreferences.getString("bookmarkData","null");
+        if (sharedPrefData.equals("null")){
+            bookmarkDataList = new ArrayList<>();
+        }
+        else {
+            bookmarkDataList = gson.fromJson(sharedPrefData,new TypeToken<ArrayList<BookmarkData>>(){}.getType());
+        }
+
+        Intent intent = new Intent(TestAutoComplete.this,BookmarkPage.class);
+        BookmarkData bookmarkData = new BookmarkData(finalPlace.getLatLng().toString(),finalPlace.getName().toString());
+        //BookmarkData bookmarkData = new BookmarkData(finalPlace.getLatLng(),finalPlace.getName().toString());
+        //bookmarkDataList.add(new BookmarkData(finalPlace.getLatLng(),finalPlace.getName().toString()));
+        bookmarkDataList.add(bookmarkData);
+
+        // SharedPreferences.Editor editor = getSharedPreferences("bookmarkData",MODE_PRIVATE).edit();
+//        editor.putString("bookmark",gson.toJson(bookmarkDataList));
+//        editor.apply();
+        if (bookmarkDataList.size() == 0){
+            editor.putString("bookmarkData","");
+            editor.apply();
+        }
+        else {
+            storeBookmarks(editor,i,bookmarkDataList);
+        }
         i++;
         startActivity(intent);
     }
+
     public void storeBookmarks(SharedPreferences.Editor editor , int i, ArrayList<BookmarkData> bookmarkDataList){
-        switch(i){
-            case 0:
-                editor.putString("bookmark1",gson.toJson(bookmarkDataList));
-                editor.apply();
-                Log.i("1","1" );
+        editor.putString("bookmarkData",gson.toJson(bookmarkDataList));
+        editor.apply();
 
-                break;
-            case 1:
-                editor.putString("bookmark2",gson.toJson(bookmarkDataList));
-                editor.apply();
-                Log.i("2","2" );
-
-                break;
-            case 2:
-                editor.putString("bookmark3",gson.toJson(bookmarkDataList));
-                editor.apply();
-                Log.i("3","3" );
-
-                break;
-            case 3:
-                editor.putString("bookmark4",gson.toJson(bookmarkDataList));
-                editor.apply();
-                Log.i("4","4" );
-
-                break;
-            case 4:
-                editor.putString("bookmark5",gson.toJson(bookmarkDataList));
-                editor.apply();
-                Log.i("5","5" );
-
-                break;
-
-            case 5:
-                editor.putString("bookmark5",gson.toJson(bookmarkDataList));
-                editor.apply();
-                Log.i("6","6" );
-
-                break;
-
-            case 6:
-                editor.putString("bookmark5",gson.toJson(bookmarkDataList));
-                editor.apply();
-                Log.i("7","7" );
-
-                break;
-
-            case 7:
-                editor.putString("bookmark5",gson.toJson(bookmarkDataList));
-                editor.apply();
-                Log.i("8","8" );
-
-                break;
-
-            case 8:
-                editor.putString("bookmark5",gson.toJson(bookmarkDataList));
-                editor.apply();
-                Log.i("9","9" );
-
-                break;
-
-
-
-        }
+//        switch(i){
+//            case 0:
+//                editor.putString("bookmark1",gson.toJson(bookmarkDataList));
+//                editor.apply();
+//                Log.i("1","1" );
+//
+//                break;
+//            case 1:
+//                editor.putString("bookmark2",gson.toJson(bookmarkDataList));
+//                editor.apply();
+//                Log.i("2","2" );
+//
+//                break;
+//            case 2:
+//                editor.putString("bookmark3",gson.toJson(bookmarkDataList));
+//                editor.apply();
+//                Log.i("3","3" );
+//
+//                break;
+//            case 3:
+//                editor.putString("bookmark4",gson.toJson(bookmarkDataList));
+//                editor.apply();
+//                Log.i("4","4" );
+//
+//                break;
+//            case 4:
+//                editor.putString("bookmark5",gson.toJson(bookmarkDataList));
+//                editor.apply();
+//                Log.i("5","5" );
+//
+//                break;
+//
+//            case 5:
+//                editor.putString("bookmark5",gson.toJson(bookmarkDataList));
+//                editor.apply();
+//                Log.i("6","6" );
+//
+//                break;
+//
+//            case 6:
+//                editor.putString("bookmark5",gson.toJson(bookmarkDataList));
+//                editor.apply();
+//                Log.i("7","7" );
+//
+//                break;
+//
+//            case 7:
+//                editor.putString("bookmark5",gson.toJson(bookmarkDataList));
+//                editor.apply();
+//                Log.i("8","8" );
+//
+//                break;
+//
+//            case 8:
+//                editor.putString("bookmark5",gson.toJson(bookmarkDataList));
+//                editor.apply();
+//                Log.i("9","9" );
+//
+//                break;
+//
+//
+//
+//        }
     }
 
 }

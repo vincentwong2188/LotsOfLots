@@ -40,5 +40,7 @@ public class CarParkList {
         return carparksArrayList;
     }
 
-
+    public static void setCarparksList(ArrayList<CarPark> carparksArrayList) {
+        CarParkList.carparksArrayList = carparksArrayList;
+    }
 }
