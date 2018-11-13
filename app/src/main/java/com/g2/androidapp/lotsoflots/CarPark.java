@@ -27,25 +27,23 @@ public class CarPark {
 */
 
 
-    CarPark(String number, String address, float x, float y){
+    CarPark(String number, String address, float x, float y, double latitude, double longitude){
         carpark_number = number;
         carpark_address = address;
         x_coord = x;
         y_coord = y;
-        LatLonCoordinate latlng = SVY21.computeLatLon(y_coord, x_coord);
-        lat = latlng.getLatitude();
-        lng = latlng.getLongitude();
+        lat = latitude;
+        lng = longitude;
         vacancies = 0;
 
     }
-    CarPark(String number, String address, float x, float y, int vac){
+    CarPark(String number, String address, float x, float y,  double latitude, double longitude, int vac){
         carpark_number = number;
         carpark_address = address;
         x_coord = x;
         y_coord = y;
-        LatLonCoordinate latlng = SVY21.computeLatLon(y_coord, x_coord);
-        lat = latlng.getLatitude();
-        lng = latlng.getLongitude();
+        lat = latitude;
+        lng = longitude;
         vacancies = vac;
     }
 
