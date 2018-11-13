@@ -9,26 +9,38 @@ public class BookmarkList {
     private static ArrayList<Bookmark> bookmarkArrayList = new ArrayList<>(0);
 
 
+    /**
+     * Getting the list of bookmarks.
+     */
+    public static ArrayList<Bookmark> getBookmark() {
+        return bookmarkArrayList;
+    }
 
-    /** Getting the list of bookmarks. */
-    public static ArrayList<Bookmark> getBookmark(){return bookmarkArrayList;}
 
-
-
-    /** Adding bookmark.*/
-    public static void addBookmark(Bookmark bookmark)  {
+    /**
+     * Adding bookmark.
+     */
+    public static void addBookmark(Bookmark bookmark) {
         bookmarkArrayList.add(bookmark);
     }
 
 
+    /**
+     * deleting bookmark
+     */
 
-    /** deleting bookmark */
+    public static void deleteBookmark(Bookmark bookmark) {
 
-    public static void deleteBookmark(Bookmark bookmark){
-       bookmarkArrayList.remove(bookmark);
-        }
+        bookmarkArrayList.remove(bookmark);
+    }
+
+
+    public static Bookmark getBookmark(int index) {
+        return bookmarkArrayList.get(index);
 
     }
+
+}
 
 
 
