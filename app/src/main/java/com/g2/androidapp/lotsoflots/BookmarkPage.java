@@ -85,7 +85,7 @@ public class BookmarkPage extends AppCompatActivity {
         Log.d("Bookmark",preferenceData);
 
 
-        if (preferenceData != "Not available" && preferenceData != "") {
+        if (!preferenceData.equals("Not available") && !preferenceData.equals("")) {
             bookmarkDataList = gson.fromJson(preferenceData,new TypeToken<List<BookmarkData>>(){}.getType());
         }
 
