@@ -12,9 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import static android.support.v4.content.ContextCompat.startActivity;
 
 public class BookmarkAdapter extends ArrayAdapter<BookmarkData> {
 
@@ -41,13 +38,12 @@ public class BookmarkAdapter extends ArrayAdapter<BookmarkData> {
         }
 
         TextView textView = view.findViewById(R.id.bookmark_address);
-        //textView.setText(getItem(position).getName());
         textView.setText(getItem(position).name);
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), MapsActivity.class);
-                intent.putExtra("BMT", getItem(position).latlng);
+                intent.putExtra("com.g2.androidapp.lotsoflots.BMT", getItem(position).latlng);
                 getContext().startActivity(intent);
 
             }

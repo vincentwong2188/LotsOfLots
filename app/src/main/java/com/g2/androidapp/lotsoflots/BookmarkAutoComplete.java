@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
@@ -18,7 +17,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 
-public class TestAutoComplete extends AppCompatActivity {
+public class BookmarkAutoComplete extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     int PLACE_AUTOCOMPLETE_REQUEST_CODE =1;
     private final static int REQUEST_CODE_1 = 1;
@@ -77,8 +76,8 @@ public class TestAutoComplete extends AppCompatActivity {
             bookmarkDataList = gson.fromJson(sharedPrefData,new TypeToken<ArrayList<BookmarkData>>(){}.getType());
         }
 
-        Intent intent = new Intent(TestAutoComplete.this,BookmarkPage.class);
-        BookmarkData bookmarkData = new BookmarkData(finalPlace.getLatLng().toString(),finalPlace.getName().toString());
+        Intent intent = new Intent(BookmarkAutoComplete.this,BookmarkPage.class);
+        BookmarkData bookmarkData = new BookmarkData(finalPlace.getLatLng().latitude + "," + finalPlace.getLatLng().longitude,finalPlace.getName().toString());
         //BookmarkData bookmarkData = new BookmarkData(finalPlace.getLatLng(),finalPlace.getName().toString());
         //bookmarkDataList.add(new BookmarkData(finalPlace.getLatLng(),finalPlace.getName().toString()));
         bookmarkDataList.add(bookmarkData);

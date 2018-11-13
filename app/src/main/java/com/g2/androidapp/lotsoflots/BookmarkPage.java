@@ -2,26 +2,19 @@ package com.g2.androidapp.lotsoflots;
 // autocomplete.getPlace().geometry.location --> https://stackoverflow.com/questions/10957649/google-maps-autocomplete-how-to-get-lat-lng
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class BookmarkPage extends AppCompatActivity {
 
@@ -85,7 +78,7 @@ public class BookmarkPage extends AppCompatActivity {
         Log.d("Bookmark",preferenceData);
 
 
-        if (preferenceData != "Not available" && preferenceData != "") {
+        if (!preferenceData.equals("Not available") && !preferenceData.equals("")) {
             bookmarkDataList = gson.fromJson(preferenceData,new TypeToken<List<BookmarkData>>(){}.getType());
         }
 
@@ -99,9 +92,9 @@ public class BookmarkPage extends AppCompatActivity {
     }
 
 
-    public void launchTestAutoComplete(View view) {
+    public void launchBookmarkAutoComplete(View view) {
         Log.d(LOG_TAG, "Add Bookmark Button clicked!");
-        Intent intent = new Intent(this, TestAutoComplete.class);
+        Intent intent = new Intent(this, BookmarkAutoComplete.class);
         startActivityForResult(intent,1014);
 
     }
