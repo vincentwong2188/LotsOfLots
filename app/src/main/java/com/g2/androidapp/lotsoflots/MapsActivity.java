@@ -184,7 +184,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onResume() {
         super.onResume();
         receivedIntent = getIntent();
-        sTargetLocation = receivedIntent.getStringExtra("com.g2.androidapp.lotsoflots.BMT"); //TODO: add in key for location from bookmarks
+        sTargetLocation = receivedIntent.getStringExtra("com.g2.androidapp.lotsoflots.BMT");
     }
 
     /**
