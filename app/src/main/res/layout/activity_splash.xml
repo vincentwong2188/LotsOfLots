@@ -42,6 +42,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/LotsOfLots"
-        app:srcCompat="@drawable/loading" />
+        app:srcCompat="@drawable/loading_small" />
 
 </android.support.constraint.ConstraintLayout>
