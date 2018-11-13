@@ -2,6 +2,7 @@ package com.g2.androidapp.lotsoflots;
 
 import android.app.VoiceInteractor;
 import android.content.Context;
+import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
 import android.util.Log;
@@ -17,6 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.time.Instant;
 import java.util.Date;
 
@@ -30,6 +32,35 @@ public class APIRetrieveSystem {
 
     }
 
+
+    static String converttime(String time){
+        //converts current time and date to a week ago
+        String timeStamp = Instant.now().toString();
+        String currentdate = timeStamp.substring(0, 11);
+        String inputdatetime = currentdate + time.substring(0, 2) + ":" + time.substring(2, 4) + ":00.838+0800Z";
+        Log.d("Response", inputdatetime);
+        Date date = null;
+        try {
+            date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").parse(inputdatetime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Log.d("Response", "the date is: " + date.toString());
+
+        //1 week ago
+        long DAY_IN_MS = 1000 * 60 * 60 * 24;
+        Date past = new Date(date.getTime() - (7 * DAY_IN_MS));
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        String strpast = dateFormat.format(past);
+        Log.d("Response", "a week ago it was: " + strpast);
+        strpast = strpast.substring(0, 19);
+        Log.d("Response", "a week ago it was: " + strpast);
+
+        return strpast;
+
+    }
+
+
     static void retrieveall(Context context){
         String timeStamp = Instant.now().toString();
         Log.d("Response", "timestamp is: " + timeStamp.substring(0, 19));
@@ -37,8 +68,9 @@ public class APIRetrieveSystem {
 
     }
 
-    static void retrieveall(String date_time, Context context){
+    static void retrieveall(String time, Context context){
 
+        String date_time = converttime(time);
 
         //first we fill the carpark list array with carpark objects (with no vacancies yet)
         retrieveCarParks(context);
@@ -118,7 +150,6 @@ public class APIRetrieveSystem {
         String URL = "https://api.data.gov.sg/v1/transport/carpark-availability?date_time=";
         String ReqURL = URL + date_time;
 
-        Log.d("Response", "URL is: "+ ReqURL);
 
         //create a request queue
         RequestQueue requestQueue=Volley.newRequestQueue(context);
@@ -134,12 +165,10 @@ public class APIRetrieveSystem {
                         //Log.d("Response", response.toString());
                         try{
                             JSONArray items = response.getJSONArray("items");
-                            Log.d("Response", "items is: " + items.toString());
                             JSONObject itemsobject = items.getJSONObject(0);
-                            Log.d("Response", "itemsobject is: " + itemsobject.toString());
                             JSONArray carpark_data = itemsobject.getJSONArray("carpark_data");
                             //Log.d("Response", "carparkdata are: " + carpark_data.toString());
-                            Log.d("Response", "number of carparkdata entries are: "+ carpark_data.length());
+                            //Log.d("Response", "number of carparkdata entries are: "+ carpark_data.length());
                             for(int i = 0; i < carpark_data.length(); i++){
                                 JSONObject temp = carpark_data.getJSONObject(i);
                                 int index = CarParkList.findCarpark(temp.getString("carpark_number"));
@@ -150,7 +179,7 @@ public class APIRetrieveSystem {
                                 //Log.d("Response", "carpark_infoobject is: " + carpark_infoobject.toString());
                                 CarParkList.changeVacancy(carpark_infoobject.getInt("lots_available"), index);
                                 CarParkList.setCapacity(carpark_infoobject.getInt("total_lots"), index);
-                                Log.d("Response", "vacancies are: " + CarParkList.getCarParkList().get(index).vacancies);
+                                //Log.d("Response", "vacancies are: " + CarParkList.getCarParkList().get(index).vacancies);
                                 //Log.d("Response", "capacity is: " + CarParkList.getCarParkList().get(index).capacity);
 
                             }
@@ -165,7 +194,7 @@ public class APIRetrieveSystem {
                     public void onErrorResponse(VolleyError error) {
                     }
                 }
-                );
+        );
 
         requestQueue.add(objectRequest);
 

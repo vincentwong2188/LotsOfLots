@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
                //testapi_output.setText(Instant.now().toString());
 
 
-                APIRetrieveSystem.retrieveall(MainActivity.this);
+                APIRetrieveSystem.retrieveall("2011", MainActivity.this);
                testapi_output.setText("ran!");
             }
         });
@@ -83,8 +83,8 @@ public class MainActivity extends AppCompatActivity {
         testsort_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                LatLng random = new LatLng(1.374363, 103.746769);
-                SortingSystem.sortCarParkbyVacancy(random);
+                LatLng random = new LatLng(1.340121, 103.956807);
+                SortingSystem.sortCarParkbyDistance(random);
                 testapi_output.setText("sorted!");
             }
         });

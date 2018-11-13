@@ -55,25 +55,32 @@ public class Preference {
 
     /** getting the price in Preference */
 
-    public static double getVacancy() {
+    public static int getVacancy() {
         return vacancy;
 
     }
     public static void setSort(String sorts) {
-        sort = sorts;
+
+        switch (sorts) {
+            case "Distance":
+                sort = "Distance";
+                break;
+            case "Vacancy":
+                sort = "Vacancy";
+                break;
+
+        }
     }
 
-    /** getting the price in Preference */
 
-    public static String getSort() {
-        return sort;
-
-    }
+    public static String getSort(){
+            return sort;
+        }
 
     /** setting Time in preference*/
 
     @SuppressLint("DefaultLocale")
-    public void setTime(int hour, int minute) {
+    public void setTime(int hour,int minute) {
 
         this.time = String.format("%2d%02d", hour, minute);;
     }
@@ -89,3 +96,5 @@ public class Preference {
 
 
 }
+
+
