@@ -49,6 +49,7 @@ public class Filter extends AppCompatActivity implements DatePickerDialog.OnDate
                 preference.setDistance(distance);
                 preference.setVacancy(vacancy);
                 preference.setTime(hourFinal , minuteFinal);
+                preference.setSort(sort);
                 finish();
             }
         });
