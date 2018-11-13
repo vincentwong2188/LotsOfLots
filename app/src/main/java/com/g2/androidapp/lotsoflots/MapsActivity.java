@@ -378,6 +378,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             TextView title = new TextView(this);
             TextView contents = new TextView(this);
             TextView index = new TextView(this);
+            TextView address = new TextView(this);
             title.setText(cpList.get(j).getName());
             title.setTypeface(title.getTypeface(), Typeface.BOLD_ITALIC);
             title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
@@ -386,9 +387,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             contents.setPadding(5, 5, 5, 20);
             index.setText(cpList.get(j).getName());
             index.setVisibility(View.INVISIBLE);
+            address.setText(cpList.get(j).getCarpark_address());
+            address.setPadding(5, 5, 5, 20);
             itemLayout.addView(title);
             itemLayout.addView(contents);
             itemLayout.addView(index);
+            itemLayout.addView(address);
 
             View v = new View(this);
             v.setLayoutParams(new LinearLayout.LayoutParams(
