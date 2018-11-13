@@ -137,7 +137,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }else if (id == R.id.action_debug){
             startActivity(new Intent(this,MainActivity.class));
         }else if (id == R.id.action_about){
-
+            startActivity(new Intent(this,AboutActivity.class));
         }else if(id == R.id.action_search){
             try {
                 Intent intent =
