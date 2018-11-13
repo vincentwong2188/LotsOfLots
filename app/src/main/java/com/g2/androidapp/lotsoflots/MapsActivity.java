@@ -42,6 +42,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -72,6 +73,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
@@ -94,6 +100,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                            }
                        }
 
+                    }else{
+                        Toast.makeText(MapsActivity.this, "Please turn on the GPS", Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -102,17 +110,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             e.printStackTrace();
         }
 
-
-
-
         APIRetrieveSystem.retrieveCarParks(this);
 
-
-
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
     }
 
     @Override
@@ -163,6 +162,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 Location searchLocation = new Location("");
                 searchLocation.setLongitude(place.getLatLng().longitude);
                 searchLocation.setLatitude(place.getLatLng().latitude);
+                mMap.clear();
                 searchLocation(searchLocation);
                 Toast.makeText(MapsActivity.this, place.getName(), Toast.LENGTH_SHORT).show();
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
@@ -180,7 +180,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onResume() {
         super.onResume();
         receivedIntent = getIntent();
-        sTargetLocation = receivedIntent.getStringExtra("BMT"); //TODO: add in key for location from bookmarks
+        sTargetLocation = receivedIntent.getStringExtra("com.g2.androidapp.lotsoflots.BMT"); //TODO: add in key for location from bookmarks
     }
 
     /**
@@ -234,9 +234,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public boolean onMarkerClick(final Marker marker) {
 
+        if(marker.getTag().getClass() == CarPark.class){
+            CarPark cp = (CarPark) marker.getTag();
+            showPin(cp.getName());
+        }
         // Retrieve the data from the marker.
-        CarPark cp = (CarPark) marker.getTag();
-        showPin(cp.getName());
+
 
 
         // Return false to indicate that we have not consumed the event and that we wish
@@ -305,8 +308,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         CarParkList.setCarparksList(listToDisplay);
         listToDisplay.get(0).lat = 47.6739881;
         listToDisplay.get(0).lng = -122.121512;
+        if(true){
+            Marker here = mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(location.getLatitude(),location.getLongitude()))
+                    .title("Searched Location")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+            here.setTag("HI");
+        }
         for(int i = 0; i < listToDisplay.size(); i++){
-            if(mMap!=null){
+            if(true){
                 Marker mMarker;
                 mMarker = mMap.addMarker(new MarkerOptions().position(listToDisplay.get(i).getLocation()).title(listToDisplay.get(i).carpark_number));
                 mMarker.setTag(listToDisplay.get(i));
@@ -314,7 +324,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         }
         populateCarParkList(listToDisplay);
-        if(mMap != null){
+        if(true){
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()),14));
         }
     }

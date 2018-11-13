@@ -55,7 +55,7 @@
             android:label="Bookmarks" />
         <activity
             android:name=".BookmarkAutoComplete"
-            android:label="TestAutoComplete"
+            android:label="Search Location"
             android:parentActivityName=".BookmarkPage">
 
         </activity>
