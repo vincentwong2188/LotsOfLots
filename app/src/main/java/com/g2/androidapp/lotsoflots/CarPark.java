@@ -32,8 +32,9 @@ public class CarPark {
         carpark_address = address;
         x_coord = x;
         y_coord = y;
-        lat = CoordinateConverter.convert(y_coord, x_coord).getLatitude();
-        lng = CoordinateConverter.convert(y_coord, x_coord).getLongitude();
+        LatLonCoordinate latlng = SVY21.computeLatLon(y_coord, x_coord);
+        lat = latlng.getLatitude();
+        lng = latlng.getLongitude();
         vacancies = 0;
 
     }
@@ -42,8 +43,9 @@ public class CarPark {
         carpark_address = address;
         x_coord = x;
         y_coord = y;
-        lat = CoordinateConverter.convert(y_coord, x_coord).getLatitude();
-        lng = CoordinateConverter.convert(y_coord, x_coord).getLongitude();
+        LatLonCoordinate latlng = SVY21.computeLatLon(y_coord, x_coord);
+        lat = latlng.getLatitude();
+        lng = latlng.getLongitude();
         vacancies = vac;
     }
 
