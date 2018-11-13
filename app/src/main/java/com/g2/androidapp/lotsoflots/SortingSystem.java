@@ -26,7 +26,7 @@ public class SortingSystem {
 
         ArrayList<CarPark> sortedCarparks = new ArrayList<CarPark>();
 
-        if (Preference.getSort() == "Distance") {
+        if (Preference.getSort().equals("Distance")) {
 
             sortedCarparks = sortCarParkbyDistance(llc);
         }
