@@ -18,6 +18,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
@@ -310,8 +311,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private void searchLocation(Location location){
         //listToDisplay = SortingSystem.sortCarParkbyDistance(new LatLng(location.getLatitude(),location.getLongitude())); TODO: add call to sorting
         listToDisplay = new ArrayList<>(0);
-        listToDisplay.add(new CarPark("E8","ABC",  0, 0, 47.6739881, -122.121512));
-        CarParkList.setCarparksList(listToDisplay);
+        //listToDisplay.add(new CarPark("E8","ABC",  0, 0, 47.6739881, -122.121512));
+        //CarParkList.setCarparksList(listToDisplay);
+        listToDisplay = Facade.getSortedList(new LatLng(location.getLatitude(), location.getLongitude()), this);
+        if(listToDisplay.size() == 0){
+            Log.d("listdisplay", "SIZE 0");
+        }
+        Log.d("listdisplay", "" + CarParkList.getCarParkList().size());
         if(true){
             Marker here = mMap.addMarker(new MarkerOptions()
                     .position(new LatLng(location.getLatitude(),location.getLongitude()))
