@@ -44,6 +44,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -140,7 +141,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }else if(id == R.id.action_search){
             try {
                 Intent intent =
-                        new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY)
+                        new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY).setBoundsBias(new LatLngBounds(
+                                new LatLng(1.093108, 103.563076),
+                                new LatLng(1.496751, 104.136911)
+                                ))
                                 .build(this);
                 startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
             } catch (GooglePlayServicesRepairableException e) {
@@ -306,8 +310,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         listToDisplay = new ArrayList<>(0);
         listToDisplay.add(new CarPark("E8","ABC",  0, 0, 47.6739881, -122.121512));
         CarParkList.setCarparksList(listToDisplay);
-        //listToDisplay.get(0).lat = 47.6739881;
-        //listToDisplay.get(0).lng = -122.121512;
         if(true){
             Marker here = mMap.addMarker(new MarkerOptions()
                     .position(new LatLng(location.getLatitude(),location.getLongitude()))
