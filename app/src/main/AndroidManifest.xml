@@ -56,7 +56,9 @@
         <activity
             android:name=".BookmarkAutoComplete"
             android:label="TestAutoComplete"
-            android:parentActivityName=".BookmarkPage"></activity>
+            android:parentActivityName=".BookmarkPage">
+
+        </activity>
         <activity
             android:name=".SplashActivity"
             android:label="Splash"
