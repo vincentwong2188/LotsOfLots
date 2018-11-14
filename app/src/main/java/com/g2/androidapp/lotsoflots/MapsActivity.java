@@ -18,6 +18,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
@@ -35,6 +36,7 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
@@ -42,7 +44,9 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -67,10 +71,20 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     CarPark lastCarPark;
 
+    AutocompleteFilter autocompleteFilter = new AutocompleteFilter.Builder()
+            .setTypeFilter(Place.TYPE_COUNTRY)
+            .setCountry("SG")
+            .build();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
@@ -94,6 +108,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                            }
                        }
 
+                    }else{
+                        Toast.makeText(MapsActivity.this, "Please turn on the GPS", Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -102,18 +118,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             e.printStackTrace();
         }
 
-
-
-
         APIRetrieveSystem.retrieveCarParks(this);
 
-
-
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -121,6 +129,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -141,7 +150,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }else if(id == R.id.action_search){
             try {
                 Intent intent =
-                        new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY)
+                        new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY).setBoundsBias(new LatLngBounds(
+                                new LatLng(1.093108, 103.563076),
+                                new LatLng(1.496751, 104.136911)
+                                )).setFilter(autocompleteFilter)
                                 .build(this);
                 startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
             } catch (GooglePlayServicesRepairableException e) {
@@ -163,6 +175,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 Location searchLocation = new Location("");
                 searchLocation.setLongitude(place.getLatLng().longitude);
                 searchLocation.setLatitude(place.getLatLng().latitude);
+                mMap.clear();
                 searchLocation(searchLocation);
                 Toast.makeText(MapsActivity.this, place.getName(), Toast.LENGTH_SHORT).show();
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
@@ -180,7 +193,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onResume() {
         super.onResume();
         receivedIntent = getIntent();
-        sTargetLocation = receivedIntent.getStringExtra("BMT"); //TODO: add in key for location from bookmarks
+        sTargetLocation = receivedIntent.getStringExtra("com.g2.androidapp.lotsoflots.BMT");
     }
 
     /**
@@ -234,9 +247,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public boolean onMarkerClick(final Marker marker) {
 
+        if(marker.getTag().getClass() == CarPark.class){
+            CarPark cp = (CarPark) marker.getTag();
+            showPin(cp.getName());
+        }
         // Retrieve the data from the marker.
-        CarPark cp = (CarPark) marker.getTag();
-        showPin(cp.getName());
+
 
 
         // Return false to indicate that we have not consumed the event and that we wish
@@ -301,12 +317,22 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private void searchLocation(Location location){
         //listToDisplay = SortingSystem.sortCarParkbyDistance(new LatLng(location.getLatitude(),location.getLongitude())); TODO: add call to sorting
         listToDisplay = new ArrayList<>(0);
-        //listToDisplay.add(new CarPark("E8","ABC",  0, 0));
-        CarParkList.setCarparksList(listToDisplay);
-        listToDisplay.get(0).lat = 47.6739881;
-        listToDisplay.get(0).lng = -122.121512;
+        //listToDisplay.add(new CarPark("E8","ABC",  0, 0, 47.6739881, -122.121512));
+        //CarParkList.setCarparksList(listToDisplay);
+        listToDisplay = Facade.getSortedList(new LatLng(location.getLatitude(), location.getLongitude()), this);
+        if(listToDisplay.size() == 0){
+            Log.d("listdisplay", "SIZE 0");
+        }
+        Log.d("listdisplay", "" + CarParkList.getCarParkList().size());
+        if(true){
+            Marker here = mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(location.getLatitude(),location.getLongitude()))
+                    .title("Searched Location")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+            here.setTag("HI");
+        }
         for(int i = 0; i < listToDisplay.size(); i++){
-            if(mMap!=null){
+            if(true){
                 Marker mMarker;
                 mMarker = mMap.addMarker(new MarkerOptions().position(listToDisplay.get(i).getLocation()).title(listToDisplay.get(i).carpark_number));
                 mMarker.setTag(listToDisplay.get(i));
@@ -314,7 +340,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         }
         populateCarParkList(listToDisplay);
-        if(mMap != null){
+        if(true){
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()),14));
         }
     }
@@ -358,6 +384,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             TextView title = new TextView(this);
             TextView contents = new TextView(this);
             TextView index = new TextView(this);
+            TextView address = new TextView(this);
             title.setText(cpList.get(j).getName());
             title.setTypeface(title.getTypeface(), Typeface.BOLD_ITALIC);
             title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
@@ -366,9 +393,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             contents.setPadding(5, 5, 5, 20);
             index.setText(cpList.get(j).getName());
             index.setVisibility(View.INVISIBLE);
+            address.setText(cpList.get(j).getCarpark_address());
+            address.setPadding(5, 5, 5, 20);
             itemLayout.addView(title);
             itemLayout.addView(contents);
             itemLayout.addView(index);
+            itemLayout.addView(address);
 
             View v = new View(this);
             v.setLayoutParams(new LinearLayout.LayoutParams(

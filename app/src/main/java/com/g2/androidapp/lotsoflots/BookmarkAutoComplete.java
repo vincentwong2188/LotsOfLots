@@ -77,7 +77,7 @@ public class BookmarkAutoComplete extends AppCompatActivity {
         }
 
         Intent intent = new Intent(BookmarkAutoComplete.this,BookmarkPage.class);
-        BookmarkData bookmarkData = new BookmarkData(finalPlace.getLatLng().toString(),finalPlace.getName().toString());
+        BookmarkData bookmarkData = new BookmarkData(finalPlace.getLatLng().latitude + "," + finalPlace.getLatLng().longitude,finalPlace.getName().toString());
         //BookmarkData bookmarkData = new BookmarkData(finalPlace.getLatLng(),finalPlace.getName().toString());
         //bookmarkDataList.add(new BookmarkData(finalPlace.getLatLng(),finalPlace.getName().toString()));
         bookmarkDataList.add(bookmarkData);

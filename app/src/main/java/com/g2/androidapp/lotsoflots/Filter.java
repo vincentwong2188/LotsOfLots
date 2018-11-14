@@ -31,7 +31,6 @@ public class Filter extends AppCompatActivity implements DatePickerDialog.OnDate
     //String[] choice =  new String[3];
     String distance = null,  vacancy = null , sort = null, time;
     Spinner distanceSpinner, vacancySpinner, sortSpinner;
-    Preference preference = new Preference();
     int day,month,year,hour,minute,dayFinal,monthFinal,yearFinal,hourFinal,minuteFinal;
 
     @Override
@@ -46,10 +45,10 @@ public class Filter extends AppCompatActivity implements DatePickerDialog.OnDate
             @Override
             public void onClick(View v) {
 
-                preference.setDistance(distance);
-                preference.setVacancy(vacancy);
-                preference.setTime(hourFinal , minuteFinal);
-                preference.setSort(sort);
+                Preference.setDistance(distance);
+                Preference.setVacancy(vacancy);
+                Preference.setTime(hourFinal , minuteFinal);
+                Preference.setSort(sort);
                 finish();
             }
         });
