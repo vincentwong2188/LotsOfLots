@@ -301,7 +301,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private void searchLocation(Location location){
         //listToDisplay = SortingSystem.sortCarParkbyDistance(new LatLng(location.getLatitude(),location.getLongitude())); TODO: add call to sorting
         listToDisplay = new ArrayList<>(0);
-        listToDisplay.add(new CarPark("E8","ABC",  0, 0));
+        //listToDisplay.add(new CarPark("E8","ABC",  0, 0));
         CarParkList.setCarparksList(listToDisplay);
         listToDisplay.get(0).lat = 47.6739881;
         listToDisplay.get(0).lng = -122.121512;

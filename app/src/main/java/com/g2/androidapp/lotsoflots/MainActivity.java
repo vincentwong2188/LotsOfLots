@@ -68,8 +68,8 @@ public class MainActivity extends AppCompatActivity {
 
                //testapi_output.setText(Instant.now().toString());
 
-
-                APIRetrieveSystem.retrieveall("2011", MainActivity.this);
+                Preference.setTime("2359");
+                APIRetrieveSystem.retrieveall(MainActivity.this);
                testapi_output.setText("ran!");
             }
         });

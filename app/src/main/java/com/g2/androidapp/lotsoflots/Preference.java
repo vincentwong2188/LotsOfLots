@@ -15,6 +15,13 @@ public class Preference {
     public Preference(){
 
     }
+
+    /** set time for API testing*/
+
+    public static void setTime(String times){
+        time = times;
+    }
+
     /** setting distance in preference*/
     public static void setDistance(String dist) {
         switch(dist){

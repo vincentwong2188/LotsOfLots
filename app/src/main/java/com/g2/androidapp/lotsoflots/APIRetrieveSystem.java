@@ -35,42 +35,84 @@ public class APIRetrieveSystem {
 
     static String converttime(String time){
         //converts current time and date to a week ago
-        String timeStamp = Instant.now().toString();
-        String currentdate = timeStamp.substring(0, 11);
-        String inputdatetime = currentdate + time.substring(0, 2) + ":" + time.substring(2, 4) + ":00.838+0800Z";
+
+        String strpast = ":(";
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+
+        //get the date now in a string
+        Date date_0 = new Date();
+        Date date = new Date(date_0.getTime() + 60*60*1000*8); //this is the date now
+        String date_time = dateFormat.format(date);
+        String currentdate = date_time.substring(0, 11);
+
+        //convert the preference time into a string, make it date format
+        String inputdatetime = currentdate + time.substring(0, 2) + ":" + time.substring(2, 4) + ":00.838+0000Z";
         Log.d("Response", inputdatetime);
-        Date date = null;
         try {
-            date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").parse(inputdatetime);
+            Date datepreference = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").parse(inputdatetime);
+            Log.d("Response", "the date is: " + date.toString());
+            long DAY_IN_MS = 1000 * 60 * 60 * 24;
+            Date past = new Date(datepreference.getTime() - (7 * DAY_IN_MS));
+            strpast = dateFormat.format(past);
+            //Log.d("Response", "a week ago it was: " + strpast);
+            strpast = strpast.substring(0, 19);
+            Log.d("Response", "a week ago it was: " + strpast);
+
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        Log.d("Response", "the date is: " + date.toString());
+
 
         //1 week ago
-        long DAY_IN_MS = 1000 * 60 * 60 * 24;
-        Date past = new Date(date.getTime() - (7 * DAY_IN_MS));
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-        String strpast = dateFormat.format(past);
-        Log.d("Response", "a week ago it was: " + strpast);
-        strpast = strpast.substring(0, 19);
-        Log.d("Response", "a week ago it was: " + strpast);
-
         return strpast;
 
     }
 
 
-    static void retrieveall(Context context){
-        String timeStamp = Instant.now().toString();
-        Log.d("Response", "timestamp is: " + timeStamp.substring(0, 19));
-        retrieveall(timeStamp.substring(0, 19), context);
+    static String getTime(){
 
+        //get time now in date format and add 1h
+        Date date_0 = new Date();
+        Date date = new Date(date_0.getTime() + 60*60*1000*8);
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        String date_time = dateFormat.format(date);
+        Log.d("Response", "date_time is: " + date_time);
+
+        Log.d("Response", "the time right now is: " + date.toString());
+
+        //add 1h to time now
+        Date datecompare = new Date(date.getTime() + 60*60*1000);
+
+        Log.d("Response", "the time one hour from now is: " + datecompare.toString());
+
+        //convert preference date to date format
+        //String date_time = Instant.now().toString();
+        String currentdate = date_time.substring(0, 11);
+        String inputdatetime = currentdate + Preference.getTime().substring(0, 2) + ":" + Preference.getTime().substring(2, 4) + ":00.838+0000Z";
+        Date preferencedate = null;
+        try {
+            preferencedate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").parse(inputdatetime);
+            Log.d("Response", "the preference date is: " + preferencedate.toString());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+
+        if (preferencedate.compareTo(datecompare) > 0){
+            date_time = converttime(Preference.getTime());
+        }
+
+        Log.d("Response", "the date_time input is: " + date_time);
+
+
+        return date_time.substring(0, 19);
     }
 
-    static void retrieveall(String time, Context context){
+    static void retrieveall(Context context){
 
-        String date_time = converttime(time);
+        // get date and time
+        String date_time = getTime();
 
         //first we fill the carpark list array with carpark objects (with no vacancies yet)
         retrieveCarParks(context);
