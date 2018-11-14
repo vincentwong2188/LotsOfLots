@@ -36,6 +36,7 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
@@ -69,6 +70,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     final int LOCATION_PERMISSION_REQUEST_CODE = 21;
 
     CarPark lastCarPark;
+
+    AutocompleteFilter autocompleteFilter = new AutocompleteFilter.Builder()
+            .setTypeFilter(Place.TYPE_COUNTRY)
+            .setCountry("SG")
+            .build();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,7 +153,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY).setBoundsBias(new LatLngBounds(
                                 new LatLng(1.093108, 103.563076),
                                 new LatLng(1.496751, 104.136911)
-                                ))
+                                )).setFilter(autocompleteFilter)
                                 .build(this);
                 startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
             } catch (GooglePlayServicesRepairableException e) {
@@ -378,6 +384,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             TextView title = new TextView(this);
             TextView contents = new TextView(this);
             TextView index = new TextView(this);
+            TextView address = new TextView(this);
             title.setText(cpList.get(j).getName());
             title.setTypeface(title.getTypeface(), Typeface.BOLD_ITALIC);
             title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
@@ -386,9 +393,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             contents.setPadding(5, 5, 5, 20);
             index.setText(cpList.get(j).getName());
             index.setVisibility(View.INVISIBLE);
+            address.setText(cpList.get(j).getCarpark_address());
+            address.setPadding(5, 5, 5, 20);
             itemLayout.addView(title);
             itemLayout.addView(contents);
             itemLayout.addView(index);
+            itemLayout.addView(address);
 
             View v = new View(this);
             v.setLayoutParams(new LinearLayout.LayoutParams(

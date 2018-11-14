@@ -71,7 +71,7 @@ public class APIRetrieveSystem {
 
     static void retrieveall(String time, Context context){
 
-        CarParkList.setCarparksList(new ArrayList<CarPark>());
+        //CarParkList.setCarparksList(new ArrayList<CarPark>());
         String date_time = converttime(time);
 
         //first we fill the carpark list array with carpark objects (with no vacancies yet)
