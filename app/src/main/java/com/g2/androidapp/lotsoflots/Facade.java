@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class Facade {
 
     private static Facade instance = null;
+    private static String prevTime = null;
 
     private Facade(){
     }
@@ -22,16 +23,16 @@ public class Facade {
     }
 
     public static ArrayList<CarPark> getSortedList(LatLng location, Context context){
-        APIRetrieveSystem.retrieveall(context);
+        if(prevTime == null){
+            prevTime = Preference.getTime();
+            APIRetrieveSystem.retrieveall(context);
+        }else if(!prevTime.equals(Preference.getTime())){
+            APIRetrieveSystem.retrieveall(context);
+            prevTime = Preference.getTime();
+        }
         Log.d("Response", CarParkList.getCarParkList().size()+"");
         return SortingSystem.sortCarparks(location);
     }
 
 
 }
-
-
-
-
-
-

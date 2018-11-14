@@ -87,6 +87,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     final String REQUESTING_LOCATION_UPDATES_KEY = "44";
 
+    private boolean previouslyLaunched = false;
+    private Location previouslyLocation;
+
     CarPark lastCarPark;
 
     AutocompleteFilter autocompleteFilter = new AutocompleteFilter.Builder()
@@ -273,6 +276,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (mRequestingLocationUpdates) {
             startLocationUpdates();
         }
+        if(previouslyLaunched){
+            searchLocation(previouslyLocation);
+        }
     }
 
     private void startLocationUpdates() {
@@ -320,6 +326,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
         LatLng singapore = new LatLng(1.3521, 103.8198);
+
+        previouslyLaunched = true;
 
         // Set a listener for marker click.
         mMap.setOnMarkerClickListener(this);
@@ -417,6 +425,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
     private void searchLocation(Location location){
+        previouslyLocation = location;
         //listToDisplay = SortingSystem.sortCarParkbyDistance(new LatLng(location.getLatitude(),location.getLongitude())); TODO: add call to sorting
         listToDisplay = new ArrayList<>(0);
         //listToDisplay.add(new CarPark("E8","ABC",  0, 0, 47.6739881, -122.121512));
@@ -468,7 +477,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 public void onClick(View view) {
                     // Show a toast message.
                     clickedItem = (LinearLayout) view;
-                    TextView tv = (TextView) clickedItem.getChildAt(3);
+                    TextView tv = (TextView) clickedItem.getChildAt(4);
                     Toast.makeText(MapsActivity.this, tv.getText(), Toast.LENGTH_SHORT).show();
                     showPin((String)tv.getText());
                 }
@@ -488,18 +497,22 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             TextView contents = new TextView(this);
             TextView index = new TextView(this);
             TextView address = new TextView(this);
+            TextView distance = new TextView(this);
             title.setText("CarPark " + cpList.get(j).getName());
             title.setTypeface(title.getTypeface(), Typeface.BOLD_ITALIC);
             title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
             title.setPadding(5, 5, 5, 5);
             contents.setText("Vacancy: " + cpList.get(j).getVacancy() + "/" + cpList.get(j).getCapacity());
             contents.setPadding(5, 5, 5, 20);
+            distance.setText("Distance: " + (int)cpList.get(j).getDistance() + " meters");
+            distance.setPadding(5, 5, 5, 20);
             index.setText(cpList.get(j).getName());
             index.setVisibility(View.INVISIBLE);
             address.setText(cpList.get(j).getCarpark_address());
             address.setPadding(5, 5, 5, 20);
             itemLayout.addView(title);
             itemLayout.addView(contents);
+            itemLayout.addView(distance);
             itemLayout.addView(address);
             itemLayout.addView(index);
 

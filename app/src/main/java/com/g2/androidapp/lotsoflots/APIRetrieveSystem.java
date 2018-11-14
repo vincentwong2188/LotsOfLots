@@ -130,8 +130,13 @@ public class APIRetrieveSystem {
     static void retrieveCarParks(Context context){
         int offset = 0;
 
+//        if(CarParkList.getCarParkList().size() != 0){
+//            CarParkList.resetCarparksList();
+//        }
+
         //create a request queue
         do {
+
             String URLpart1 = "https://data.gov.sg/api/action/datastore_search?offset=";
             String URLpart2 = "&resource_id=139a3035-e624-4f56-b63f-89ae28d4ae4c";
             String URL = URLpart1 + offset + URLpart2;

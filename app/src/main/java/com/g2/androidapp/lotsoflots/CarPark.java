@@ -15,6 +15,7 @@ public class CarPark {
     protected double lng;
     protected int vacancies;
     protected int capacity;
+    protected float distance = 0;
 
 
     private String location;
@@ -68,12 +69,17 @@ public class CarPark {
     }
 
 
+    public float getDistance() {
+        return distance;
+    }
+
     /** Method to set location in the CarPark class */
 
  /*   public void setLocation(String Location){
         this.location = Location;
     }
 */
+
 
     public String getCarpark_address() {
         return carpark_address;
@@ -101,7 +107,7 @@ public  float calcDistance(LatLng currentloc){
     Location carparkloc = new Location("");
     carparkloc.setLatitude(lat);
     carparkloc.setLongitude(lng);
-
+    distance = carparkloc.distanceTo(currentloc2);
     return carparkloc.distanceTo(currentloc2);
 
 
