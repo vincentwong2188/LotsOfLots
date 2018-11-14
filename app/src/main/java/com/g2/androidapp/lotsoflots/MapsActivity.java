@@ -87,6 +87,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     final String REQUESTING_LOCATION_UPDATES_KEY = "44";
 
+    private boolean previouslyLaunched = false;
+    private Location previouslyLocation;
+
     CarPark lastCarPark;
 
     AutocompleteFilter autocompleteFilter = new AutocompleteFilter.Builder()
@@ -273,6 +276,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (mRequestingLocationUpdates) {
             startLocationUpdates();
         }
+        if(previouslyLaunched){
+            searchLocation(previouslyLocation);
+        }
     }
 
     private void startLocationUpdates() {
@@ -320,6 +326,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
         LatLng singapore = new LatLng(1.3521, 103.8198);
+
+        previouslyLaunched = true;
 
         // Set a listener for marker click.
         mMap.setOnMarkerClickListener(this);
@@ -417,6 +425,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
     private void searchLocation(Location location){
+        previouslyLocation = location;
         //listToDisplay = SortingSystem.sortCarParkbyDistance(new LatLng(location.getLatitude(),location.getLongitude())); TODO: add call to sorting
         listToDisplay = new ArrayList<>(0);
         //listToDisplay.add(new CarPark("E8","ABC",  0, 0, 47.6739881, -122.121512));
