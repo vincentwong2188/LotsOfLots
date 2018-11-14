@@ -23,7 +23,7 @@ public class AboutActivity extends AppCompatActivity {
         darrence.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(AboutActivity.this, "Darrence Quote", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AboutActivity.this, "\"That's what she said.\"", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -37,14 +37,14 @@ public class AboutActivity extends AppCompatActivity {
         janssen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(AboutActivity.this, "Janssen Quote", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AboutActivity.this, "\"What happens in the room stays in the room.\"", Toast.LENGTH_SHORT).show();
             }
         });
 
         milla.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(AboutActivity.this, "Milla Quote", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AboutActivity.this, "\"Don't cry because it happened, smile because its over.\"", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -58,7 +58,7 @@ public class AboutActivity extends AppCompatActivity {
         vincent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(AboutActivity.this, "Vincent Quote", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AboutActivity.this, "\"You're the snack I want.\"", Toast.LENGTH_SHORT).show();
             }
         });
     }
