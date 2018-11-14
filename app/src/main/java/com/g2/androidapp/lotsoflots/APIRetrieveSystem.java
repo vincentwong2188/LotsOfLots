@@ -87,20 +87,23 @@ public class APIRetrieveSystem {
 
         //convert preference date to date format
         //String date_time = Instant.now().toString();
-        String currentdate = date_time.substring(0, 11);
-        String inputdatetime = currentdate + Preference.getTime().substring(0, 2) + ":" + Preference.getTime().substring(2, 4) + ":00.838+0000Z";
-        Date preferencedate = null;
-        try {
-            preferencedate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").parse(inputdatetime);
-            Log.d("Response", "the preference date is: " + preferencedate.toString());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+
+        if(Preference.getTime() != null) {
+            String currentdate = date_time.substring(0, 11);
+            String inputdatetime = currentdate + Preference.getTime().substring(0, 2) + ":" + Preference.getTime().substring(2, 4) + ":00.838+0000Z";
+            Date preferencedate = null;
+            try {
+                preferencedate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").parse(inputdatetime);
+                Log.d("Response", "the preference date is: " + preferencedate.toString());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
 
+            if (preferencedate.compareTo(datecompare) > 0) {
+                date_time = converttime(Preference.getTime());
+            }
 
-        if (preferencedate.compareTo(datecompare) > 0){
-            date_time = converttime(Preference.getTime());
         }
 
         Log.d("Response", "the date_time input is: " + date_time);
@@ -110,6 +113,8 @@ public class APIRetrieveSystem {
     }
 
     static void retrieveall(Context context){
+
+        //CarParkList.carparksArrayList.clear();
 
         // get date and time
         String date_time = getTime();
