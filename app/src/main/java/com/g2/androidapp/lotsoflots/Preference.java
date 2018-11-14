@@ -80,9 +80,9 @@ public class Preference {
     /** setting Time in preference*/
 
     @SuppressLint("DefaultLocale")
-    public void setTime(int hour,int minute) {
+    public static void setTime(int hour,int minute) {
 
-        this.time = String.format("%2d%02d", hour, minute);;
+        time = String.format("%2d%02d", hour, minute);;
     }
 
     /** getting the time in Preference */

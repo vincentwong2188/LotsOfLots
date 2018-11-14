@@ -48,8 +48,8 @@ public class SortingSystem {
         //double userDistance = 1000;
 
         /** Code then takes into account the user's filter of vacancies */
-        //int userVacancy = Preference.getVacancy();
-        int userVacancy = 10;
+        int userVacancy = Preference.getVacancy();
+        //int userVacancy = 10;
 
         /** Instantiation of CarPark ArrayLists to be used in the sorting algorithm */
         ArrayList<CarPark> temp = CarParkList.getCarParkList();
