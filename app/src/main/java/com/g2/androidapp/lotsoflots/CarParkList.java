@@ -43,4 +43,8 @@ public class CarParkList {
     public static void setCarparksList(ArrayList<CarPark> carparksArrayList) {
         CarParkList.carparksArrayList = carparksArrayList;
     }
+
+    public static void resetCarparksList(){
+        CarParkList.carparksArrayList.clear();
+    }
 }
