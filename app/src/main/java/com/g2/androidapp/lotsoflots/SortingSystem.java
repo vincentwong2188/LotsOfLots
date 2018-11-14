@@ -24,18 +24,15 @@ public class SortingSystem {
 
     public static ArrayList<CarPark> sortCarparks(LatLng llc) {
 
-        ArrayList<CarPark> sortedCarparks = new ArrayList<CarPark>();
 
-        if (Preference.getSort() == "Distance") {
+        if (Preference.getSort().equals("Distance")) {
 
-            sortedCarparks = sortCarParkbyDistance(llc);
+            return sortCarParkbyDistance(llc);
         }
         else{
 
-            sortedCarparks = sortCarParkbyVacancy(llc);
+            return sortCarParkbyVacancy(llc);
         }
-
-        return sortedCarparks;
 
     }
 
@@ -48,8 +45,8 @@ public class SortingSystem {
         //double userDistance = 1000;
 
         /** Code then takes into account the user's filter of vacancies */
-        //int userVacancy = Preference.getVacancy();
-        int userVacancy = 10;
+        int userVacancy = Preference.getVacancy();
+        //int userVacancy = 10;
 
         /** Instantiation of CarPark ArrayLists to be used in the sorting algorithm */
         ArrayList<CarPark> temp = CarParkList.getCarParkList();

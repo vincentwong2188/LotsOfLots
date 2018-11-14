@@ -20,6 +20,7 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class APIRetrieveSystem {
@@ -70,6 +71,7 @@ public class APIRetrieveSystem {
 
     static void retrieveall(String time, Context context){
 
+        //CarParkList.setCarparksList(new ArrayList<CarPark>());
         String date_time = converttime(time);
 
         //first we fill the carpark list array with carpark objects (with no vacancies yet)
@@ -181,7 +183,7 @@ public class APIRetrieveSystem {
                                 CarParkList.changeVacancy(carpark_infoobject.getInt("lots_available"), index);
                                 CarParkList.setCapacity(carpark_infoobject.getInt("total_lots"), index);
                                 //Log.d("Response", "vacancies are: " + CarParkList.getCarParkList().get(index).vacancies);
-                                //Log.d("Response", "capacity is: " + CarParkList.getCarParkList().get(index).capacity);
+                                Log.d("Response", "capacity is: " + CarParkList.getCarParkList().get(index).capacity);
 
                             }
                         } catch (JSONException e){

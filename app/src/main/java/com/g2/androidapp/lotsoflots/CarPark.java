@@ -75,6 +75,10 @@ public class CarPark {
     }
 */
 
+    public String getCarpark_address() {
+        return carpark_address;
+    }
+
     /** Method to get number of Vacancies within CarPark*/
     public int getVacancy(){
         return vacancies;
