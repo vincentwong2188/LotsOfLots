@@ -1,6 +1,5 @@
 package com.g2.androidapp.lotsoflots;
 
-import com.google.android.gms.maps.model.LatLng;
 
 public class BookmarkData {
     String latlng;

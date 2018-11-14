@@ -28,6 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,7 +46,6 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.location.places.AutocompleteFilter;
-import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -67,7 +67,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private GoogleMap mMap;
     private BottomSheetBehavior mBottomSheetBehavior;
-    private GeoDataClient mGeoDataClient;
     private ArrayList<CarPark> listToDisplay = new ArrayList<>(0);
     private FusedLocationProviderClient mFusedLocationClient = null; // location provider
     LocationRequest mLocationRequest;
@@ -90,6 +89,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private boolean previouslyLaunched = false;
     private Location previouslyLocation;
 
+    private ProgressBar pg;
+
     CarPark lastCarPark;
 
     AutocompleteFilter autocompleteFilter = new AutocompleteFilter.Builder()
@@ -107,6 +108,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        pg = (ProgressBar) findViewById(R.id.loadingbar);
+        pg.setVisibility(View.INVISIBLE);
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
@@ -339,6 +342,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if(sTargetLocation == null){
             if(currentLocation != null){
                 targetLocation = currentLocation;
+                searchLocation(targetLocation);
             }else{
                 //Toast.makeText(MapsActivity.this, "No location detected", Toast.LENGTH_SHORT).show();
             }
@@ -412,6 +416,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             new GoogleMap.OnMyLocationButtonClickListener() {
                 @Override
                 public boolean onMyLocationButtonClick() {
+                    searchLocation(currentLocation);
                     return false;
                 }
             };
@@ -425,35 +430,41 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
     private void searchLocation(Location location){
+        pg.setVisibility(View.VISIBLE);
+
         previouslyLocation = location;
         //listToDisplay = SortingSystem.sortCarParkbyDistance(new LatLng(location.getLatitude(),location.getLongitude())); TODO: add call to sorting
         listToDisplay = new ArrayList<>(0);
         //listToDisplay.add(new CarPark("E8","ABC",  0, 0, 47.6739881, -122.121512));
         //CarParkList.setCarparksList(listToDisplay);
+
         listToDisplay = Facade.getSortedList(new LatLng(location.getLatitude(), location.getLongitude()), this);
         if(listToDisplay.size() == 0){
             Log.d("listdisplay", "SIZE 0");
         }
         Log.d("listdisplay", "" + CarParkList.getCarParkList().size());
-        if(true){
-            Marker here = mMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(location.getLatitude(),location.getLongitude()))
-                    .title("Searched Location")
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-            here.setTag("HI");
-        }
+        mMap.clear();
+
         for(int i = 0; i < listToDisplay.size(); i++){
-            if(true){
-                Marker mMarker;
-                mMarker = mMap.addMarker(new MarkerOptions().position(listToDisplay.get(i).getLocation()).title(listToDisplay.get(i).carpark_number));
-                mMarker.setTag(listToDisplay.get(i));
-            }
+
+            Marker mMarker;
+            mMarker = mMap.addMarker(new MarkerOptions().position(listToDisplay.get(i).getLocation()).title(listToDisplay.get(i).carpark_number));
+            mMarker.setTag(listToDisplay.get(i));
+
 
         }
         Log.d("Response", "Size of list: " + listToDisplay.size());
+
+        Marker here = mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(location.getLatitude(),location.getLongitude()))
+                .title("Searched Location")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+        here.setTag("HI");
+        
         populateCarParkList(listToDisplay);
+        pg.setVisibility(View.INVISIBLE);
         if(true){
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()),14));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()),15));
         }
     }
 
@@ -468,21 +479,66 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         scrollContents.removeAllViewsInLayout();
 
-        for(int j = 0; j < cpList.size(); j++){
+        if(cpList.size() > 0){
+            for(int j = 0; j < cpList.size(); j++){
+                LinearLayout itemLayout = new LinearLayout(this);
+
+                // Implement it's on click listener.
+                itemLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // Show a toast message.
+                        clickedItem = (LinearLayout) view;
+                        TextView tv = (TextView) clickedItem.getChildAt(4);
+                        Toast.makeText(MapsActivity.this, tv.getText(), Toast.LENGTH_SHORT).show();
+                        showPin((String)tv.getText());
+                    }
+                });
+
+
+                RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+                        RelativeLayout.LayoutParams.MATCH_PARENT,
+                        RelativeLayout.LayoutParams.WRAP_CONTENT
+                );
+
+                lp.setMargins(10,10,10,10);
+                itemLayout.setLayoutParams(lp);
+                itemLayout.setOrientation(LinearLayout.VERTICAL);
+
+                TextView title = new TextView(this);
+                TextView contents = new TextView(this);
+                TextView index = new TextView(this);
+                TextView address = new TextView(this);
+                TextView distance = new TextView(this);
+                title.setText("CarPark " + cpList.get(j).getName());
+                title.setTypeface(title.getTypeface(), Typeface.BOLD_ITALIC);
+                title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
+                title.setPadding(5, 5, 5, 5);
+                contents.setText("Vacancy: " + cpList.get(j).getVacancy() + "/" + cpList.get(j).getCapacity());
+                contents.setPadding(5, 5, 5, 20);
+                distance.setText("Distance: " + (int)cpList.get(j).getDistance() + " meters");
+                distance.setPadding(5, 5, 5, 20);
+                index.setText(cpList.get(j).getName());
+                index.setVisibility(View.INVISIBLE);
+                address.setText(cpList.get(j).getCarpark_address());
+                address.setPadding(5, 5, 5, 20);
+                itemLayout.addView(title);
+                itemLayout.addView(contents);
+                itemLayout.addView(distance);
+                itemLayout.addView(address);
+                itemLayout.addView(index);
+
+                View v = new View(this);
+                v.setLayoutParams(new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        1
+                ));
+                v.setBackgroundColor(Color.parseColor("#B3B3B3"));
+                itemLayout.addView(v);
+                scrollContents.addView(itemLayout);
+            }
+        }else{
             LinearLayout itemLayout = new LinearLayout(this);
-
-            // Implement it's on click listener.
-            itemLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    // Show a toast message.
-                    clickedItem = (LinearLayout) view;
-                    TextView tv = (TextView) clickedItem.getChildAt(4);
-                    Toast.makeText(MapsActivity.this, tv.getText(), Toast.LENGTH_SHORT).show();
-                    showPin((String)tv.getText());
-                }
-            });
-
 
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.MATCH_PARENT,
@@ -494,35 +550,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             itemLayout.setOrientation(LinearLayout.VERTICAL);
 
             TextView title = new TextView(this);
-            TextView contents = new TextView(this);
-            TextView index = new TextView(this);
-            TextView address = new TextView(this);
-            TextView distance = new TextView(this);
-            title.setText("CarPark " + cpList.get(j).getName());
+            title.setText("No Results");
             title.setTypeface(title.getTypeface(), Typeface.BOLD_ITALIC);
             title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
             title.setPadding(5, 5, 5, 5);
-            contents.setText("Vacancy: " + cpList.get(j).getVacancy() + "/" + cpList.get(j).getCapacity());
-            contents.setPadding(5, 5, 5, 20);
-            distance.setText("Distance: " + (int)cpList.get(j).getDistance() + " meters");
-            distance.setPadding(5, 5, 5, 20);
-            index.setText(cpList.get(j).getName());
-            index.setVisibility(View.INVISIBLE);
-            address.setText(cpList.get(j).getCarpark_address());
-            address.setPadding(5, 5, 5, 20);
             itemLayout.addView(title);
-            itemLayout.addView(contents);
-            itemLayout.addView(distance);
-            itemLayout.addView(address);
-            itemLayout.addView(index);
-
-            View v = new View(this);
-            v.setLayoutParams(new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    1
-            ));
-            v.setBackgroundColor(Color.parseColor("#B3B3B3"));
-            itemLayout.addView(v);
             scrollContents.addView(itemLayout);
         }
     }
