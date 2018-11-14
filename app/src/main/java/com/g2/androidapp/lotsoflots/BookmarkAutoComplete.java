@@ -8,10 +8,13 @@ import android.util.Log;
 import android.view.View;
 
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -26,6 +29,11 @@ public class BookmarkAutoComplete extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     static int i = 0;
     private static Gson gson = new Gson();
+
+    AutocompleteFilter autocompleteFilter = new AutocompleteFilter.Builder()
+            .setTypeFilter(Place.TYPE_COUNTRY)
+            .setCountry("SG")
+            .build();
 
     @Override
     protected void onActivityResult(int requestCode , int resultCode, Intent data){
@@ -46,6 +54,12 @@ public class BookmarkAutoComplete extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("bookmarkData",MODE_PRIVATE);
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+        autocompleteFragment.setFilter(autocompleteFilter);
+        autocompleteFragment.setBoundsBias(new LatLngBounds(
+                new LatLng(1.093108, 103.563076),
+                new LatLng(1.496751, 104.136911)
+        ));
+
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
@@ -61,6 +75,7 @@ public class BookmarkAutoComplete extends AppCompatActivity {
                 Log.i(TAG, "An error occurred: " + status);
             }
         });
+
     }
 
     public void printAddedBookmark(View view) {
