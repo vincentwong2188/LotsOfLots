@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -33,9 +34,16 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.Place;
@@ -49,7 +57,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
 
@@ -60,7 +70,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private GeoDataClient mGeoDataClient;
     private ArrayList<CarPark> listToDisplay = new ArrayList<>(0);
     private FusedLocationProviderClient mFusedLocationClient = null; // location provider
+    LocationRequest mLocationRequest;
+    boolean mRequestingLocationUpdates;
+    private LocationCallback mLocationCallback;
     private Location currentLocation = null;
+
     private Intent receivedIntent;
     private String sTargetLocation = null;
     private boolean searched = false;
@@ -68,6 +82,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
 
     final int LOCATION_PERMISSION_REQUEST_CODE = 21;
+
+    final int REQUEST_CHECK_SETTINGS = 42;
+
+    final String REQUESTING_LOCATION_UPDATES_KEY = "44";
 
     CarPark lastCarPark;
 
@@ -80,6 +98,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        updateValuesFromBundle(savedInstanceState);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -90,6 +109,62 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         setSupportActionBar(myToolbar);
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        createLocationRequest();
+
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                .addLocationRequest(mLocationRequest);
+
+        SettingsClient client = LocationServices.getSettingsClient(this);
+        Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());
+
+        task.addOnSuccessListener(this, new OnSuccessListener<LocationSettingsResponse>() {
+            @Override
+            public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
+                // All location settings are satisfied. The client can initialize
+                // location requests here.
+                // ...
+            }
+        });
+
+        task.addOnFailureListener(this, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                if (e instanceof ResolvableApiException) {
+                    // Location settings are not satisfied, but this can be fixed
+                    // by showing the user a dialog.
+                    try {
+                        // Show the dialog by calling startResolutionForResult(),
+                        // and check the result in onActivityResult().
+                        ResolvableApiException resolvable = (ResolvableApiException) e;
+                        resolvable.startResolutionForResult(MapsActivity.this,
+                                REQUEST_CHECK_SETTINGS);
+                    } catch (IntentSender.SendIntentException sendEx) {
+                        // Ignore the error.
+                    }
+                }
+            }
+        });
+
+        mLocationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult == null) {
+                    if(currentLocation != locationResult.getLastLocation()){
+                        currentLocation = locationResult.getLastLocation();
+                        if(!searched){
+                            searchLocation(locationResult.getLastLocation());
+                            //searched = true;
+                        }
+                    }
+                    return;
+                }
+                for (Location location : locationResult.getLocations()) {
+                    // Update UI with location data
+                    // ...
+                }
+            };
+        };
 
 
         try{
@@ -102,9 +177,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         // Logic to handle location object
                        if(currentLocation != location){
                            currentLocation = location;
-                           if(searched == false){
+                           if(!searched){
                                searchLocation(location);
-                               searched = true;
+                               //searched = true;
                            }
                        }
 
@@ -176,6 +251,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 searchLocation.setLongitude(place.getLatLng().longitude);
                 searchLocation.setLatitude(place.getLatLng().latitude);
                 mMap.clear();
+                searched = true;
                 searchLocation(searchLocation);
                 Toast.makeText(MapsActivity.this, place.getName(), Toast.LENGTH_SHORT).show();
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
@@ -194,6 +270,32 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onResume();
         receivedIntent = getIntent();
         sTargetLocation = receivedIntent.getStringExtra("com.g2.androidapp.lotsoflots.BMT");
+        if (mRequestingLocationUpdates) {
+            startLocationUpdates();
+        }
+    }
+
+    private void startLocationUpdates() {
+        mFusedLocationClient.requestLocationUpdates(mLocationRequest,
+                mLocationCallback,
+                null /* Looper */);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        stopLocationUpdates();
+    }
+
+    private void stopLocationUpdates() {
+        mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean(REQUESTING_LOCATION_UPDATES_KEY,
+                mRequestingLocationUpdates);
+        super.onSaveInstanceState(outState);
     }
 
     /**
@@ -339,6 +441,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
 
         }
+        Log.d("Response", "Size of list: " + listToDisplay.size());
         populateCarParkList(listToDisplay);
         if(true){
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()),14));
@@ -365,7 +468,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 public void onClick(View view) {
                     // Show a toast message.
                     clickedItem = (LinearLayout) view;
-                    TextView tv = (TextView) clickedItem.getChildAt(2);
+                    TextView tv = (TextView) clickedItem.getChildAt(3);
                     Toast.makeText(MapsActivity.this, tv.getText(), Toast.LENGTH_SHORT).show();
                     showPin((String)tv.getText());
                 }
@@ -385,11 +488,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             TextView contents = new TextView(this);
             TextView index = new TextView(this);
             TextView address = new TextView(this);
-            title.setText(cpList.get(j).getName());
+            title.setText("CarPark " + cpList.get(j).getName());
             title.setTypeface(title.getTypeface(), Typeface.BOLD_ITALIC);
             title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
             title.setPadding(5, 5, 5, 5);
-            contents.setText("Vacancy: " + cpList.get(j).getVacancy());
+            contents.setText("Vacancy: " + cpList.get(j).getVacancy() + "/" + cpList.get(j).getCapacity());
             contents.setPadding(5, 5, 5, 20);
             index.setText(cpList.get(j).getName());
             index.setVisibility(View.INVISIBLE);
@@ -397,8 +500,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             address.setPadding(5, 5, 5, 20);
             itemLayout.addView(title);
             itemLayout.addView(contents);
-            itemLayout.addView(index);
             itemLayout.addView(address);
+            itemLayout.addView(index);
 
             View v = new View(this);
             v.setLayoutParams(new LinearLayout.LayoutParams(
@@ -481,5 +584,24 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         context.startActivity(intent);
+    }
+
+    protected void createLocationRequest() {
+        LocationRequest mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(10000);
+        mLocationRequest.setFastestInterval(5000);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    }
+
+    private void updateValuesFromBundle(Bundle savedInstanceState) {
+        if (savedInstanceState == null) {
+            return;
+        }
+
+        // Update the value of mRequestingLocationUpdates from the Bundle.
+        if (savedInstanceState.keySet().contains(REQUESTING_LOCATION_UPDATES_KEY)) {
+            mRequestingLocationUpdates = savedInstanceState.getBoolean(
+                    REQUESTING_LOCATION_UPDATES_KEY);
+        }
     }
 }

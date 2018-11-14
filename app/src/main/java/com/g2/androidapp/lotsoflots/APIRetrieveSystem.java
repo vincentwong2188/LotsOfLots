@@ -159,7 +159,7 @@ public class APIRetrieveSystem {
                                 for (int i = 0; i < records.length(); i++) {
                                     JSONObject temp = records.getJSONObject(i);
                                     //Log.d("Response", "temp is " + temp.toString());
-                                    LatLonCoordinate latlng = SVY21.computeLatLon(temp.getDouble("x_coord"), temp.getDouble("y_coord"));
+                                    LatLonCoordinate latlng = SVY21.computeLatLon(temp.getDouble("y_coord"), temp.getDouble("x_coord"));
                                     CarPark entry = new CarPark(temp.getString("car_park_no"), temp.getString("address"), (float) temp.getDouble("x_coord"), (float) temp.getDouble("y_coord"), latlng.getLatitude(), latlng.getLongitude());
                                     //Log.d("Response", "temp is " + entry.carpark_address);
                                     CarParkList.addCarPark(entry);
