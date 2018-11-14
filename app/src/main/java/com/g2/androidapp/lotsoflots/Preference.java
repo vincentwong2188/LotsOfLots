@@ -9,7 +9,7 @@ import java.util.*;
 public class Preference {
     private static double distance = 1000;
     private static int vacancy = 1;
-    private static String time ;
+    private static String time;
     private static String sort = "Distance";
 
     public Preference(){

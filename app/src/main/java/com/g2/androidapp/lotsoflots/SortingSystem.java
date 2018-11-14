@@ -24,18 +24,15 @@ public class SortingSystem {
 
     public static ArrayList<CarPark> sortCarparks(LatLng llc) {
 
-        ArrayList<CarPark> sortedCarparks = new ArrayList<CarPark>();
 
         if (Preference.getSort().equals("Distance")) {
 
-            sortedCarparks = sortCarParkbyDistance(llc);
+            return sortCarParkbyDistance(llc);
         }
         else{
 
-            sortedCarparks = sortCarParkbyVacancy(llc);
+            return sortCarParkbyVacancy(llc);
         }
-
-        return sortedCarparks;
 
     }
 
