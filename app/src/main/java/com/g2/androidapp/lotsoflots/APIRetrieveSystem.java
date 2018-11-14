@@ -1,10 +1,8 @@
 package com.g2.androidapp.lotsoflots;
 
-import android.app.VoiceInteractor;
 import android.content.Context;
 import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
-import android.icu.util.Calendar;
 import android.util.Log;
 
 import com.android.volley.Request;

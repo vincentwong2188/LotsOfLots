@@ -2,8 +2,6 @@ package com.g2.androidapp.lotsoflots;
 
 import android.annotation.SuppressLint;
 
-import java.sql.Time;
-import java.util.*;
 
 
 public class Preference {

@@ -1,5 +1,5 @@
 package com.g2.androidapp.lotsoflots;
-// autocomplete.getPlace().geometry.location --> https://stackoverflow.com/questions/10957649/google-maps-autocomplete-how-to-get-lat-lng
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
