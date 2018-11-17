@@ -2,18 +2,25 @@ package com.g2.androidapp.lotsoflots;
 
 import android.annotation.SuppressLint;
 
+import java.util.Date;
 
 
 public class Preference {
     private static double distance = 1000;
     private static int vacancy = 1;
+    private static Date date;
     private static String time;
     private static String sort = "Distance";
 
     public Preference(){
 
     }
-
+    public static void setDate(Date dates){
+        date = dates;
+    }
+    public static Date getDate(){
+        return date;
+    }
     /** set time for API testing*/
 
     public static void setTime(String times){
