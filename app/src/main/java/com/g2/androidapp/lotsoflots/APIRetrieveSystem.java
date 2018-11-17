@@ -103,7 +103,6 @@ public class APIRetrieveSystem {
             }
 
         }
-
         Log.d("Response", "the date_time input is: " + date_time);
 
 
@@ -111,8 +110,6 @@ public class APIRetrieveSystem {
     }
 
     static void retrieveall(Context context){
-
-        //CarParkList.carparksArrayList.clear();
 
         // get date and time
         String date_time = getTime();

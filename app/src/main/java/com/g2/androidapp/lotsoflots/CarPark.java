@@ -26,6 +26,11 @@ public class CarPark {
     CarPark(double lat, double lng){}
 
 */
+    CarPark(double latitude, double longitude, int vac){
+        lat = latitude;
+        lng = longitude;
+        vacancies = vac;
+    }
 
 
     CarPark(String number, String address, float x, float y, double latitude, double longitude){

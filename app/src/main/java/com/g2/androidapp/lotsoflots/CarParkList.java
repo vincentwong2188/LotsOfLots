@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class CarParkList {
 
     private int numberOfCarparks;
-    protected static ArrayList<CarPark> carparksArrayList = new ArrayList<CarPark>();
+    private static ArrayList<CarPark> carparksArrayList = new ArrayList<CarPark>();
 
     CarParkList(){
 
