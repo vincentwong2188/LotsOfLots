@@ -20,8 +20,10 @@ import android.widget.TimePicker;
 import android.text.format.DateFormat;
 
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
-
+import java.util.Date;
 
 
 public class Filter extends AppCompatActivity implements DatePickerDialog.OnDateSetListener,
@@ -31,6 +33,7 @@ public class Filter extends AppCompatActivity implements DatePickerDialog.OnDate
     //String[] choice =  new String[3];
     String distance = null,  vacancy = null , sort = null, time;
     Spinner distanceSpinner, vacancySpinner, sortSpinner;
+    Date date;
     int day,month,year,hour,minute,dayFinal,monthFinal,yearFinal,hourFinal,minuteFinal;
 
     @Override
@@ -49,6 +52,15 @@ public class Filter extends AppCompatActivity implements DatePickerDialog.OnDate
                 Preference.setVacancy(vacancy);
                 Preference.setTime(hourFinal , minuteFinal);
                 Preference.setSort(sort);
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(yearFinal,monthFinal,dayFinal,hourFinal,minuteFinal,0);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+                String formattedDate = sdf.format(calendar.getTime());
+                try {
+                    date = sdf.parse(formattedDate);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 finish();
             }
         });
@@ -63,6 +75,7 @@ public class Filter extends AppCompatActivity implements DatePickerDialog.OnDate
                 DatePickerDialog datePickerDialog= new DatePickerDialog(Filter.this , Filter.this,
                         year,month,day);
                 datePickerDialog.show();
+
             }
         });
 
@@ -151,7 +164,7 @@ public class Filter extends AppCompatActivity implements DatePickerDialog.OnDate
     @Override
     public void onDateSet (DatePicker view, int year, int month, int dayOfMonth) {
         yearFinal = year;
-        monthFinal = month+1;
+        monthFinal = month;
         dayFinal = dayOfMonth;
         Calendar c = Calendar.getInstance();
         hour = c.get(Calendar.HOUR_OF_DAY);
