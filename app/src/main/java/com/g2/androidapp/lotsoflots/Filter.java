@@ -58,6 +58,9 @@ public class Filter extends AppCompatActivity implements DatePickerDialog.OnDate
                 String formattedDate = sdf.format(calendar.getTime());
                 try {
                     date = sdf.parse(formattedDate);
+                    Preference.setDate(date);
+                    Log.i("darrence", Preference.getDate().toString());
+
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
