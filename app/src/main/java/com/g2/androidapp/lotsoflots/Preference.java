@@ -27,6 +27,8 @@ public class Preference {
         time = times;
     }
 
+
+
     /** setting distance in preference*/
     public static void setDistance(String dist) {
         switch(dist){

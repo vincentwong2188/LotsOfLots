@@ -31,7 +31,7 @@ public class APIRetrieveSystem {
     }
 
 
-    static String converttime(String time){
+    /*static String converttime(String time){
         //converts current time and date to a week ago
 
         String strpast = ":(";
@@ -39,12 +39,14 @@ public class APIRetrieveSystem {
 
         //get the date now in a string
         Date date_0 = new Date();
-        Date date = new Date(date_0.getTime() + 60*60*1000*8); //this is the date now
+        //Date date = new Date(date_0.getTime() + 60*60*1000*8); //this is the date now
+        Date date = new Date(date_0.getTime()); //this is the date now
         String date_time = dateFormat.format(date);
         String currentdate = date_time.substring(0, 11);
 
         //convert the preference time into a string, make it date format
-        String inputdatetime = currentdate + time.substring(0, 2) + ":" + time.substring(2, 4) + ":00.838+0000Z";
+        //String inputdatetime = currentdate + time.substring(0, 2) + ":" + time.substring(2, 4) + ":00.838+0000Z";
+        String inputdatetime = currentdate + time.substring(0, 2) + ":" + time.substring(2, 4) + ":00.838+0800Z";
         Log.d("Response", inputdatetime);
         try {
             Date datepreference = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").parse(inputdatetime);
@@ -71,7 +73,8 @@ public class APIRetrieveSystem {
 
         //get time now in date format and add 1h
         Date date_0 = new Date();
-        Date date = new Date(date_0.getTime() + 60*60*1000*8);
+        //Date date = new Date(date_0.getTime() + 60*60*1000*8);
+        Date date = new Date(date_0.getTime());
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
         String date_time = dateFormat.format(date);
         Log.d("Response", "date_time is: " + date_time);
@@ -79,7 +82,7 @@ public class APIRetrieveSystem {
         Log.d("Response", "the time right now is: " + date.toString());
 
         //add 1h to time now
-        Date datecompare = new Date(date.getTime() + 60*60*1000);
+        Date datecompare = new Date(date.getTime() + 3*1000);
 
         Log.d("Response", "the time one hour from now is: " + datecompare.toString());
 
@@ -88,7 +91,8 @@ public class APIRetrieveSystem {
 
         if(Preference.getTime() != null) {
             String currentdate = date_time.substring(0, 11);
-            String inputdatetime = currentdate + Preference.getTime().substring(0, 2) + ":" + Preference.getTime().substring(2, 4) + ":00.838+0000Z";
+            //String inputdatetime = currentdate + Preference.getTime().substring(0, 2) + ":" + Preference.getTime().substring(2, 4) + ":00.838+0000Z";
+            String inputdatetime = currentdate + Preference.getTime().substring(0, 2) + ":" + Preference.getTime().substring(2, 4) + ":00.838+0800Z";
             Date preferencedate = null;
             try {
                 preferencedate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").parse(inputdatetime);
@@ -107,12 +111,77 @@ public class APIRetrieveSystem {
 
 
         return date_time.substring(0, 19);
+    }*/
+
+    /**edited methods to use the date instead of the string from preference
+     *
+     *
+     * */
+
+    static String converttime(Date date){
+        //converts preference time and date to a week ago
+
+
+        Date past = new Date(date.getTime() - (7 *1000 * 60 * 60 * 24));
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        String strpast = dateFormat.format(past);
+        strpast = strpast.substring(0, 19);
+
+        Log.d("Response", strpast);
+
+
+        //1 week ago
+        return strpast;
+
+    }
+
+
+    static String getTime(){
+
+        //get time now in date format and add 3mins
+        Date date = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        String date_time = dateFormat.format(date);
+        Log.d("Response", "date_time is: " + date_time);
+
+        Log.d("Response", "the time right now is: " + date.toString());
+
+        //add 3mins to time now
+        Date datecompare = new Date(date.getTime() + 3*1000);
+
+        Log.d("Response", "the time one hour from now is: " + datecompare.toString());
+
+        //convert preference date to date format
+        //String date_time = Instant.now().toString();
+
+        //Log.d("Response", Preference.getDate().toString());
+
+
+
+            Date preferencedate = Preference.getDate();
+
+            if (preferencedate != null) {
+                Log.d("Response", "entered if");
+
+                if (preferencedate.compareTo(datecompare) > 0) {
+                    Log.d("Response", "entered if2");
+                    date_time = converttime(Preference.getDate());
+                }
+            }
+
+
+        Log.d("Response", "the date_time input is: " + date_time);
+
+
+        return date_time.substring(0, 19);
     }
 
     static void retrieveall(Context context){
 
         // get date and time
         String date_time = getTime();
+
+
 
         //first we fill the carpark list array with carpark objects (with no vacancies yet)
         retrieveCarParks(context);

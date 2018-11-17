@@ -24,6 +24,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 
 public class Filter extends AppCompatActivity implements DatePickerDialog.OnDateSetListener,
@@ -52,9 +53,11 @@ public class Filter extends AppCompatActivity implements DatePickerDialog.OnDate
                 Preference.setVacancy(vacancy);
                 Preference.setTime(hourFinal , minuteFinal);
                 Preference.setSort(sort);
+                Preference.setDate(date);
+
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(yearFinal,monthFinal,dayFinal,hourFinal,minuteFinal,0);
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.TAIWAN);
                 String formattedDate = sdf.format(calendar.getTime());
                 try {
                     date = sdf.parse(formattedDate);
