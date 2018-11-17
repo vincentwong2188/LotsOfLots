@@ -6,6 +6,8 @@ import android.util.Log;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class Facade {
 
@@ -32,6 +34,20 @@ public class Facade {
         }
         Log.d("Response", CarParkList.getCarParkList().size()+"");
         return SortingSystem.sortCarparks(location);
+    }
+
+    public static void UpdatePreferences(String distance, String vacancy, int hourFinal, int minuteFinal, Date date, String sort){
+        PreferenceUpdater.updateAll(distance, vacancy, hourFinal, minuteFinal, date, sort);
+    }
+
+    public static BookmarkAdapter getAdapter(Context context, int item, ArrayList<BookmarkData>bookmarkdatalist){
+        BookmarkAdapter adapter = new BookmarkAdapter(context, item, bookmarkdatalist);
+        return adapter;
+    }
+
+    public static BookmarkAdapter getAdapter(Context context, int item){
+        BookmarkAdapter adapter = new BookmarkAdapter(context, item);
+        return adapter;
     }
 
 

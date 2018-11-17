@@ -25,15 +25,16 @@ public class BookmarkPage extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private static Gson gson = new Gson();
     ListView listView;
-    BookmarkAdapter adapter;
+    //BookmarkAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bookmark_page);
         listView = findViewById(R.id.bookmark_list);
-        adapter = new BookmarkAdapter(this,R.layout.bookmark_list_item);
-        listView.setAdapter(adapter);
+        //adapter = new BookmarkAdapter(this,R.layout.bookmark_list_item);
+        //listView.setAdapter(adapter);
+        listView.setAdapter(Facade.getAdapter(getApplicationContext(), R.layout.bookmark_list_item));
 
         sharedPreferences = getSharedPreferences("bookmarkData",MODE_PRIVATE);
 
@@ -86,8 +87,9 @@ public class BookmarkPage extends AppCompatActivity {
             bookmarkData.add(data.getName());
         }
 
-        BookmarkAdapter adapter = new BookmarkAdapter(getApplicationContext(),R.layout.bookmark_list_item,bookmarkDataList);
-        listView.setAdapter(adapter);
+        //BookmarkAdapter adapter = new BookmarkAdapter(getApplicationContext(),R.layout.bookmark_list_item,bookmarkDataList);
+        //listView.setAdapter(adapter);
+        listView.setAdapter(Facade.getAdapter(getApplicationContext(), R.layout.bookmark_list_item, bookmarkDataList));
         listView.invalidate();
     }
 

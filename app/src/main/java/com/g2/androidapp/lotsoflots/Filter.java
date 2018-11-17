@@ -49,11 +49,8 @@ public class Filter extends AppCompatActivity implements DatePickerDialog.OnDate
             @Override
             public void onClick(View v) {
 
-                Preference.setDistance(distance);
-                Preference.setVacancy(vacancy);
-                Preference.setTime(hourFinal , minuteFinal);
-                Preference.setSort(sort);
-                Preference.setDate(date);
+                Facade.UpdatePreferences(distance, vacancy, hourFinal, minuteFinal, date, sort);
+
 
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(yearFinal,monthFinal,dayFinal,hourFinal,minuteFinal,0);
