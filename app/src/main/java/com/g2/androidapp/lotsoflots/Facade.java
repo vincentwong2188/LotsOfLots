@@ -43,6 +43,7 @@ public class Facade {
         PreferenceUpdater.updateAll(distance, vacancy, hourFinal, minuteFinal, date, sort);
     }
 
+
     public static BookmarkAdapter getAdapter(Context context, int item, ArrayList<BookmarkData>bookmarkdatalist){
         BookmarkAdapter adapter = new BookmarkAdapter(context, item, bookmarkdatalist);
         return adapter;

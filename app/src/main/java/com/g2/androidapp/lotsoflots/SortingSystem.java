@@ -65,6 +65,9 @@ public class SortingSystem {
                 confirmed1.add(temp.get(k));
             }
         }
+        System.out.println("the size of temp is: " + temp.size());
+
+        System.out.println("the size of confirmed1 is: " + confirmed1.size());
 
         /** (2) Filtering results from (1) based on Vacancy Filter */
 
@@ -74,6 +77,8 @@ public class SortingSystem {
                 confirmed2.add(confirmed1.get(n));
             }
         }
+
+        System.out.println("the size of confirmed2 is: " + confirmed2.size());
 
         /** Code then sorts filtered results based on distance in ascending order */
         for (int i = 1; i < confirmed2.size(); i++) {
@@ -89,6 +94,8 @@ public class SortingSystem {
             }
         }
 
+        System.out.println("the size of confirmed2 is: " + confirmed2.size());
+
         /** Truncating array size to 10 elements or less */
         if (confirmed2.size() > 10) {
             for (int i = 0; i < 10; i++) {
@@ -99,6 +106,8 @@ public class SortingSystem {
                 confirmed3.add(confirmed2.get(i));
             }
         }
+
+        System.out.println("the size of confirmed3 is: " + confirmed3.size());
 
 
         /** Printing elements in the array in Logcat */
