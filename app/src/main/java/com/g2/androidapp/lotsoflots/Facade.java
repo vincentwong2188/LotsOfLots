@@ -1,6 +1,7 @@
 package com.g2.androidapp.lotsoflots;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -8,6 +9,8 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class Facade {
 
@@ -48,6 +51,10 @@ public class Facade {
     public static BookmarkAdapter getAdapter(Context context, int item){
         BookmarkAdapter adapter = new BookmarkAdapter(context, item);
         return adapter;
+    }
+
+    public static SharedPreferences getBookmarkData(Context context){
+        return BookmarkAdapter.getBookmarkData(context);
     }
 
 

@@ -22,7 +22,7 @@ public class BookmarkPage extends AppCompatActivity {
     String addressName;
     private static final String LOG_TAG =
             MainActivity.class.getSimpleName();
-    private SharedPreferences sharedPreferences;
+    //private SharedPreferences sharedPreferences;
     private static Gson gson = new Gson();
     ListView listView;
     //BookmarkAdapter adapter;
@@ -36,13 +36,13 @@ public class BookmarkPage extends AppCompatActivity {
         //listView.setAdapter(adapter);
         listView.setAdapter(Facade.getAdapter(getApplicationContext(), R.layout.bookmark_list_item));
 
-        sharedPreferences = getSharedPreferences("bookmarkData",MODE_PRIVATE);
+        //sharedPreferences = getSharedPreferences("bookmarkData",MODE_PRIVATE);
 
         Button DeleteBookmark = (Button) findViewById(R.id.DeleteBtn);
         DeleteBookmark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //add code to delete bookmark here
             }
         });
 
@@ -75,7 +75,7 @@ public class BookmarkPage extends AppCompatActivity {
         ArrayList<BookmarkData> bookmarkDataList = new ArrayList<>();
         List<String> bookmarkData = new ArrayList<>();
 
-        String preferenceData = sharedPreferences.getString("bookmarkData","Not available");
+        String preferenceData = Facade.getBookmarkData(this).getString("bookmarkData","Not available");
         Log.d("Bookmark",preferenceData);
 
 
