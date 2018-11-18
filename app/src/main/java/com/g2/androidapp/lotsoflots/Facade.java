@@ -27,7 +27,7 @@ public class Facade {
         return instance;
     }
 
-    public static ArrayList<CarPark> getSortedList(LatLng location, Context context){
+    public ArrayList<CarPark> getSortedList(LatLng location, Context context){
         if(prevTime == null){
             prevTime = Preference.getTime();
             APIRetrieveSystem.retrieveall(context);
@@ -39,22 +39,22 @@ public class Facade {
         return SortingSystem.sortCarparks(location);
     }
 
-    public static void UpdatePreferences(String distance, String vacancy, int hourFinal, int minuteFinal, Date date, String sort){
+    public void UpdatePreferences(String distance, String vacancy, int hourFinal, int minuteFinal, Date date, String sort){
         PreferenceUpdater.updateAll(distance, vacancy, hourFinal, minuteFinal, date, sort);
     }
 
 
-    public static BookmarkAdapter getAdapter(Context context, int item, ArrayList<BookmarkData>bookmarkdatalist){
+    public BookmarkAdapter getAdapter(Context context, int item, ArrayList<BookmarkData>bookmarkdatalist){
         BookmarkAdapter adapter = new BookmarkAdapter(context, item, bookmarkdatalist);
         return adapter;
     }
 
-    public static BookmarkAdapter getAdapter(Context context, int item){
+    public BookmarkAdapter getAdapter(Context context, int item){
         BookmarkAdapter adapter = new BookmarkAdapter(context, item);
         return adapter;
     }
 
-    public static SharedPreferences getBookmarkData(Context context){
+    public SharedPreferences getBookmarkData(Context context){
         return BookmarkAdapter.getBookmarkData(context);
     }
 

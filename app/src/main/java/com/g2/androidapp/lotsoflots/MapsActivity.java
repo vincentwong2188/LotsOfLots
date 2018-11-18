@@ -93,6 +93,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     CarPark lastCarPark;
 
+    Facade instance;
+
     AutocompleteFilter autocompleteFilter = new AutocompleteFilter.Builder()
             .setTypeFilter(Place.TYPE_COUNTRY)
             .setCountry("SG")
@@ -100,6 +102,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        instance = Facade.getInstance();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         updateValuesFromBundle(savedInstanceState);
@@ -438,7 +441,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //listToDisplay.add(new CarPark("E8","ABC",  0, 0, 47.6739881, -122.121512));
         //CarParkList.setCarparksList(listToDisplay);
 
-        listToDisplay = Facade.getSortedList(new LatLng(location.getLatitude(), location.getLongitude()), this);
+        listToDisplay = instance.getSortedList(new LatLng(location.getLatitude(), location.getLongitude()), this);
         if(listToDisplay.size() == 0){
             Log.d("listdisplay", "SIZE 0");
         }

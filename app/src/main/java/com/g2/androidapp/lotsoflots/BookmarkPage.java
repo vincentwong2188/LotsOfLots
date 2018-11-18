@@ -27,14 +27,17 @@ public class BookmarkPage extends AppCompatActivity {
     ListView listView;
     //BookmarkAdapter adapter;
 
+    Facade instance;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        instance = Facade.getInstance();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bookmark_page);
         listView = findViewById(R.id.bookmark_list);
         //adapter = new BookmarkAdapter(this,R.layout.bookmark_list_item);
         //listView.setAdapter(adapter);
-        listView.setAdapter(Facade.getAdapter(getApplicationContext(), R.layout.bookmark_list_item));
+        listView.setAdapter(instance.getAdapter(getApplicationContext(), R.layout.bookmark_list_item));
 
         //sharedPreferences = getSharedPreferences("bookmarkData",MODE_PRIVATE);
 
@@ -75,7 +78,7 @@ public class BookmarkPage extends AppCompatActivity {
         ArrayList<BookmarkData> bookmarkDataList = new ArrayList<>();
         List<String> bookmarkData = new ArrayList<>();
 
-        String preferenceData = Facade.getBookmarkData(this).getString("bookmarkData","Not available");
+        String preferenceData = instance.getBookmarkData(this).getString("bookmarkData","Not available");
         Log.d("Bookmark",preferenceData);
 
 
@@ -89,7 +92,7 @@ public class BookmarkPage extends AppCompatActivity {
 
         //BookmarkAdapter adapter = new BookmarkAdapter(getApplicationContext(),R.layout.bookmark_list_item,bookmarkDataList);
         //listView.setAdapter(adapter);
-        listView.setAdapter(Facade.getAdapter(getApplicationContext(), R.layout.bookmark_list_item, bookmarkDataList));
+        listView.setAdapter(instance.getAdapter(getApplicationContext(), R.layout.bookmark_list_item, bookmarkDataList));
         listView.invalidate();
     }
 
