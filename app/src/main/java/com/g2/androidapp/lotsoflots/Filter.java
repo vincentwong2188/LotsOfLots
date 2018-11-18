@@ -93,6 +93,7 @@ public class Filter extends AppCompatActivity implements DatePickerDialog.OnDate
                 getResources().getStringArray(R.array.distanceSpinnerNames));
         distanceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item );
         distanceSpinner.setAdapter(distanceAdapter);
+        distanceSpinner.setSelection(2);
 
         ArrayAdapter<String> vacancyAdapter = new ArrayAdapter<String>(this , android.R.layout.simple_list_item_1,
                 getResources().getStringArray(R.array.vacancySpinnerNames));
